@@ -1,0 +1,117 @@
+\documentclass[]{aiaa-tc}% insert '[draft]' option to show overfull boxes
+
+\usepackage{aiaa_packages}
+
+ \title{Low-Thrust Trajectory Design Near Asteroids Using Invariant Manifolds and Reachability Sets}
+
+ \author{
+  Shankar Kulumani\thanksibid{1}%
+    \thanks{Doctoral Student, \href{mailto:skulumani@gwu.edu}{skulumani@gwu.edu}. Student AIAA Member.}
+  \ and Taeyoung Lee\thanksibid{2}\thanks{Associate Professor, \href{mailto:tylee@gwu.edu}{tylee@gwu.edu}. AIAA Member}\\
+  {\normalsize\itshape
+   Mechanical and Aerospace Engineering, George Washington University, 800 22nd St NW, Washington DC }\\
+   }
+
+ % Data used by 'handcarry' option if invoked
+ \AIAApapernumber{YEAR-NUMBER}
+ \AIAAconference{Conference Name, Date, and Location}
+ \AIAAcopyright{\AIAAcopyrightD{YEAR}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Abstract
+\end{abstract}
+
+\section*{Nomenclature}
+
+\begin{tabbing}
+  XXX \= \kill% this line sets tab stop and adds a newline
+  $J$ \> Jacobian Matrix \\
+  $f$ \> Residual value vector \\
+  $x$ \> Variable value vector \\
+  $F$ \> Force, \si{\newton} \\
+  $m$ \> Mass, \si{\kilo\gram} \\
+  $\Delta x$ \> Variable displacement vector \\
+  $\alpha$ \> Acceleration, \si{\meter\per\second\squared} \\[5pt]
+  \textit{Subscript}\\
+  $i$ \> Variable number \\
+\end{tabbing}
+
+\section{Introduction}
+
+% Motivation for missions/studying asteroids
+Small solar system bodies, such as asteroids and comets, are of significant interest to the scientific community.
+These small bodies offer great insight into the early formation of the solar system.
+This insight offers additional detail into the formation of the Earth and also the probable formation of other planetary systems.
+Of particular interest are those near-Earth asteroids (NEA) which inhabit heliocentric orbits in vicinity of the Earth.
+These easily accessible bodies provide attractive targets to support space industrialization, mining operations, and scientific missions..
+NEAs potentially contain many materials useful for propulsion, construction, semiconductors, precious and strategic metals~\cite{ross2001}.
+In addition, these NEAs are also of concern for their potential to impact the Earth~\cite{wie2008}.
+Asteroids and comets are the greatest threat to future civilizations and as a result there is a focused effort to mitigate these risks.
+Operating in the vicinity of asteroids is a challenging problem for spacecraft missions.
+
+% Difficulty in system model 
+While there has been significant study of interplanetary transfer trajectories, relatively less analysis has been conducted on operations in the vicinity of asteroids.
+The dynamic environment of around asteroids is strongly perturbed and challenging for analysis.
+A combination of factors contribute to make operations in the vicinity of small bodies challenging, such as distended body shapes, unknown spin states, and non-gravitational effects such as solar radiation pressure~\cite{scheeres2012}.
+
+% most use a spherical harmonic model but we use a polyhedron model
+
+% Investigate low thrust propulstion for manuevers
+% vesta paper
+% gravity tractor papers
+ 
+%Reachability set is key to the design of transfers	
+
+	
+\section{System Model}
+
+\subsection{Polyhedron Gravity Model}
+
+Cite the original werner papers
+
+\subsection{Asteroid Dynamics}
+Cite scheeres and his book
+
+Equations of motion
+
+Jacobi constant
+
+Relate to three body problem
+
+Equilibrium points. Cite work done with triaxial ellipsoids and other Castalia papers
+
+Periodic orbits
+
+\section{Reachability Set}
+
+Show \Poincare section
+
+Optimal control problem 
+
+Discuss the constraints and angles on the four dimensional space of the section
+
+Show partial derivatives 
+
+\section{Numerical Simulation}
+
+Transfer about asteroid Castalia - cite some Scheeres papers
+
+\section{Conclusion}
+
+
+
+\section*{Appendix}
+
+
+\section*{Acknowledgments}
+
+A place to recognize others.
+
+\bibliographystyle{aiaa} 
+\bibliography{library}
+
+\end{document}

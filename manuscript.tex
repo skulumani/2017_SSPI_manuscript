@@ -22,7 +22,13 @@
 \maketitle
 
 \begin{abstract}
-Abstract
+Write an awesome abstract
+
+Use the reachability set to compute transfers
+
+extend work already done in three body problem to motion around asteroid
+
+Numerical example for asteroid 4769 Castalia
 \end{abstract}
 
 \section*{Nomenclature}
@@ -51,42 +57,142 @@ These easily accessible bodies provide attractive targets to support space indus
 NEAs potentially contain many materials useful for propulsion, construction, semiconductors, precious and strategic metals~\cite{ross2001}.
 In addition, these NEAs are also of concern for their potential to impact the Earth~\cite{wie2008}.
 Asteroids and comets are the greatest threat to future civilizations and as a result there is a focused effort to mitigate these risks.
-Operating in the vicinity of asteroids is a challenging problem for spacecraft missions.
+In spite of the great interest in asteroids, the operation of spacecraft in thier vicinity is a challenging problem.
 
 % Difficulty in system model 
 While there has been significant study of interplanetary transfer trajectories, relatively less analysis has been conducted on operations in the vicinity of asteroids.
-The dynamic environment of around asteroids is strongly perturbed and challenging for analysis.
-A combination of factors contribute to make operations in the vicinity of small bodies challenging, such as distended body shapes, unknown spin states, and non-gravitational effects such as solar radiation pressure~\cite{scheeres2012}.
+The dynamic environment of around asteroids is strongly perturbed and challenging for analysis and mission operation.
+Due to their small size and therefore low gravitational attraction asteroids have irregular shapes and potentially chaotic spin states.
+Furthermore, due to the low gravitational attraction, other non-gravitional effects, such as solar radiation pressure, become more significant.
+The orbital enviornment is in general quite complex and analytical insights are difficult to generate.
 
-% most use a spherical harmonic model but we use a polyhedron model
+% Must estimate gravity and shape from ground based optical measurements
+% most use a spherical harmonic model or a ellipsoid model but we use a polyhedron model
+An accurate gravitional potential model is neccessary for the operation of spacecraft about asteroids.
+Additionally, a detailed shape model of the asteroid is needed for trajectories passing close to the body.
+The classic approach is to expand the gravitational potential into a harmonic series and compute the series coefficients.
+Radio tracking data of an orbiting spacecraft allows one to estimate the series coefficients.
+The harmonic representation are guaranteed to converge outside of the circumscribing sphere and can be truncated at a finite order based on accuracy requirements.
+However, the harmonic expansion is always an approximation as a result of the infinite order series used in the representation.
+Additionally, the harmonic model used outside of the circumscribing sphere is not guaranteed to converge inside the sphere.
+As a result, additional steps must be taken to determine a valid harmonic expansion for particles close to the body. 
+This results in a cumbersome gravity field model that requires additional constraints to ensure continuity and validity at the radius of the circumscribing sphere~\cite{werner1996}.
+Instead, we model the asteroid as a constant-density polyhedron and avoid the issues of the harmonic expansion while enabling several other useful advantages.
 
-% Investigate low thrust propulstion for manuevers
-% vesta paper
-% gravity tractor papers
- 
-%Reachability set is key to the design of transfers	
+% benefits of the polyhedron model
+A polyhedral model of the surface of an asteroid can be determined from remote optical or radar sensors.
+The faces of the polyhedron can be large or small and allows for fine detail such as depression, craters, ridges, or interior voids. 
+In addition, there is no requirement for the body to be modeled at a uniformly high resolution so small details can be incorprated with minimal cost.
+From the shape model, an analytical, closed form expression for the gravitational potential can be derived.
+The polyhedral approach provides an accurate gravitational model consistent with the resolution of the shape and the chosen discretization.
+Furthermore, the polyhedron model is an exact solution up to the surface of the body. 
+Therefore, this model is ideal for missions traversing large region both close and far from the asteroid.
 
-	
-\section{System Model}
+% similarity to the three body problem
+The irregular shape of asteroids leads to a richer dynamics as compard to the familar Kepler's problem, which is based on a point mass assumption.
+The motion of particles around asteroids is modeled using the restricted full two-body problem. 
+This model has many similarities with the restricted three body problem, and much of the theory developed there is also applicable.
+There has been much work in characterizing the relative equilibria and periodic orbits in the three-body problem.
+In addition, orbital transfers have been designed which exploit the invariant manifolds of the three-body problem for low-energy manuevers~\cite{mingotti2011,grebow2011}.
+The similarity of the three-body problem to motion around astreroids allows for much of the same theory to be applied to the asteroid problem.
+More recently, the invariant manifolds around asteroids have been proposed for orbital transfers and landing manuevers~\cite{mondelo2010,herrera2014}.
 
+% use of low thrust propulsion
+
+The application of optimal control methods for orbital trajectory design is nontrivial.
+In order to implement any optimization method a sufficiently accurate ``initial guess'' is required.
+Frequently, insight into the problem or intuition on the part of the designer is often required to determine initial conditions that will converge to the optimal solution.
+However, the asteroid system dynamics are nonlinear and exhibit chaotic behaviors. 
+This makes solving the optimization problem highly dependent on the initial condition.
+Similar to the three-body problem, there is an insufficient number of analytical constants to derive an analytical solution in general. 
+As a result, accurate numerical methods are required to determine optimal solutions.
+These methods are critically dependent on accurate initial guess in order to allow for convergence to an optimal solution.
+
+% SYSTEMATIC DESIGN TO AVOID DIFFICULTIES IN CHOOSING A GOOD INITIAL GUESS
+% CAPTURE LONG TERM EFFECTS OF LOW THRUST ACCURATELY IN NUMERICAL SIMULATION
+In this paper, we extend the design method developed in the three-body problem to motion about asteroids~\cite{kulumani2015}.
+Our approach avoids the difficulties in selecting an appropriate initial guess for optimization.
+Instead, we utilize the concept of the reachability set to enable a simple methodology of selecting initial conditions to achieve general orbital transfers. 
+Given an initial condition and fixed time horizon, the reachable set is the set of states attainable, subject to the operational constraints of the spacecraft. 
+In addition, the generation of the reachable set allows for a more systematic method of determining initial conditions and eases the burden on the designer.
+This simple methodology allows for extended transfer trajectories which iteratively approach a desired target orbit.
+
+
+\section{Asteroid Model}
+
+\subsection{Shape Model}
+Cite location of shape model database
+
+Cite Scheeres orbits close to 4769 Castalia
 \subsection{Polyhedron Gravity Model}
+
+The gravitational attraction due to a constant density polyhedron is given as
+\begin{align*}
+	U(\vecbf{r}) &= 1\frac{1}{2} G \sigma \sum_{e \in \text{edges}} \vecbf{r}_e \cdot \vecbf{E}_e \cdot \vecbf{r}_e \cdot L_e - \frac{1}{2}G \sigma \sum_{f \in \text{faces}} \vecbf{r}_f \cdot \vecbf{F}_f \cdot \vecbf{r}_f \cdot \omega_f 
+\end{align*}
+where \( \vecbf{r}_e, \vecbf{r}_f \) is the vector from the spacecraft to any point on the respective edge or face.
+The polyhedron is defined by an array of vectors in the body fixed frame which define the vertices of the body.
+Triangular faces are defined as the plane created by any three vertices. 
+Consider three vectors \( \vecbf{v}_0, \vecbf{v}_1, \vecbf{v}_2 \), assumed to be ordered in a counterclockwise direction, which define a face. 
+The outward normal vector to the face and to each edge is defined as
+\begin{align*}
+	\hat{\vecbf{n}}_f &= \parenth{\vecbf{v}_{1} - \vecbf{v}_0} \times \parenth{\vecbf{v}_{2} - \vecbf{v}_1} ,\\
+	\hat{\vecbf{n}}_{e} &= \parenth{\vecbf{v}_{i+1} - \vecbf{v}_i} \times \hat{\vecbf{n}}_f .
+\end{align*}
+Using these normal vectors we define two dyads
+\begin{align*}
+	\vecbf{E}_e &= \hat{\vecbf{n}}_A \hat{\vecbf{n}}_{12}^A + \hat{\vecbf{n}}_B \hat{\vecbf{n}}_{21}^B ,\\
+	\vecbf{F}_f &= \hat{\vecbf{n}}_f \hat{\vecbf{n}}_f .
+\end{align*}
+The edge dyad \( \vecbf{E}_e \) is defined for each edge and a function of the two adjacent faces meeting at the edge. 
+The face dyad \( \vecbf{F}_f \) is defined for each face and is a function of the face normal vector.
+
+Let \( \vecbf{r}_i \) be the vector from the spacecraft to the vertex \( \vecbf{v}_i \) and it's length is \( r_i = \norm{\vecbf{r}_i} \).
+The per-edge factor \( L_e \), for the edge connecting vertices \( \vecbf{v}_i \) and \( \vecbf{v}_j \), with a constant length \( e_{ij} \) is 
+\begin{align*}
+	L_e &= \ln \frac{r_i + r_j + e_{ij}}{r_i + r_j - e_{ij}}.
+\end{align*}
+
+For the face defined by the vertices \( \vecbf{v}_i, \vecbf{v}_j, \vecbf{v}_k \) the per-face factor \( \omega_f \) is
+\begin{align*}
+	\omega_f &= 2 \arctan \frac{\vecbf{r}_i \cdot \vecbf{r}_j \times \vecbf{r}_k}{r_i r_j r_k + r_i \parenth{\vecbf{r}_j \cdot \vecbf{r}_k} + r_j \parenth{\vecbf{r}_k \cdot \vecbf{r}_i} + r_k \parenth{\vecbf{r}_i \cdot \vecbf{r}_j}} .
+\end{align*}
+
+Using these definitions, the attraction, gravity gradient matrix, and Laplacian are defined as
+\begin{align*}
+	\nabla U ( \vecbf{r} ) &= -G \sigma \sum_{e \in \text{edges}} \vecbf{E}_e \cdot \vecbf{r}_e \cdot L_e + G \sigma \sum_{f \in \text{faces}} \vecbf{F}_f \cdot \vecbf{r}_f \cdot \omega_f ,\\
+	\nabla \nabla U ( \vecbf{r} ) &= G \sigma \sum_{e \in \text{edges}} \vecbf{E}_e  \cdot L_e - G \sigma \sum_{f \in \text{faces}} \vecbf{F}_f \cdot \omega_f , \\
+	\nabla^2 U &= -G \sigma \sum_{f \in \text{faces}}  \omega_f .
+\end{align*}
+
+One interesting thing to note is that both \( \vecbf{E}, \vecbf{F} \) can be precomputed without knowledge of the position of the satellite. 
+They are both solely functions of the vertices and edges of the polyhedral shape model.
+One a position vector \( \vecbf{r} \) is defined then the scalars \( \omega_f, L_e \) can be computed for each face and edge. 
+
+
+Duplicate the equations for polyhedron model
+
+Give an outline of how to compute the potential (which equations and order)
 
 Cite the original werner papers
 
-\subsection{Asteroid Dynamics}
+\subsection{Spacecraft Equations of Motion}
 Cite scheeres and his book
 
 Equations of motion
 
+
 Jacobi constant
 
-Relate to three body problem
+Zero velocity curves
 
 Equilibrium points. Cite work done with triaxial ellipsoids and other Castalia papers
 
 Periodic orbits
 
 \section{Reachability Set}
+
+\subsection{Optimal Control Formulation}
 
 Show \Poincare section
 
@@ -100,11 +206,11 @@ Show partial derivatives
 
 Transfer about asteroid Castalia - cite some Scheeres papers
 
+Plots of \Poincare section
+
+Full trajectory plots
+
 \section{Conclusion}
-
-
-
-\section*{Appendix}
 
 
 \section*{Acknowledgments}

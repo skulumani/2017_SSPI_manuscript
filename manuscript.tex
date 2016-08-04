@@ -2,7 +2,7 @@
 
 \usepackage{aiaa_packages}
 
- \title{Low-Thrust Trajectory Design Near Asteroids Using Invariant Manifolds and Reachability Sets}
+ \title{Low-Thrust Trajectory Design Near Asteroids Using Reachability Sets}
 
  \author{
   Shankar Kulumani\thanksibid{1}%
@@ -124,6 +124,9 @@ This simple methodology allows for extended transfer trajectories which iterativ
 Cite location of shape model database
 
 Cite Scheeres orbits close to 4769 Castalia
+
+Assuming constant rotation rate for asteroid
+
 \subsection{Polyhedron Gravity Model}
 
 The gravitational attraction due to a constant density polyhedron is given as
@@ -177,10 +180,20 @@ Give an outline of how to compute the potential (which equations and order)
 Cite the original werner papers
 
 \subsection{Spacecraft Equations of Motion}
+
+The motion of a massless particle, or spacecraft, about an asteroid shares many similarities with that of the three-body problem.
+As is typical in the three-body problem, the equations of motion are usually represented in a uniformly rotating frame aligned with the two primaries.
+Similarily, the equations of motion about an asteroid are also defined in a body-fixed frame with uniform rotation.
+In this reference frame, the gravitational potential field is time invariant and only a function of the position of the particle.
+In addition, since the rotational rate of the asteroid is constant the equations of motion are time invariant.
+Finally, the use of the rotating reference frame allows for much greater insight into the dynamic structure of the behavior around the asteroid.
+
+We define a reference frame originating at the center of mass of the asteroid. 
+  
+
 Cite scheeres and his book
 
 Equations of motion
-
 
 Jacobi constant
 
@@ -188,19 +201,20 @@ Zero velocity curves
 
 Equilibrium points. Cite work done with triaxial ellipsoids and other Castalia papers
 
-Periodic orbits
+\subsection{Determining Periodic Orbits}
 
-\section{Reachability Set}
+Periodic orbit computation summary. Cite Scheeres 2000 (Evaluation of the Dynamic environment of an asteroid)
+
+\section{Reachability Set on \Poincare Section}
+Define reachability set
+
+Define \Poincare section
 
 \subsection{Optimal Control Formulation}
 
-Show \Poincare section
-
-Optimal control problem 
+Formulate OCP to generate the reachability set
 
 Discuss the constraints and angles on the four dimensional space of the section
-
-Show partial derivatives 
 
 \section{Numerical Simulation}
 
@@ -209,6 +223,8 @@ Transfer about asteroid Castalia - cite some Scheeres papers
 Plots of \Poincare section
 
 Full trajectory plots
+
+Thruster magnitude is chosen to emulate some real thrusters - cite the Dawn paper
 
 \section{Conclusion}
 

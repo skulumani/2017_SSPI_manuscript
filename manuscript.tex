@@ -127,57 +127,74 @@ Cite Scheeres orbits close to 4769 Castalia
 
 Assuming constant rotation rate for asteroid
 
+Mention we're looking at asteroid 4769 Castalia
+
 \subsection{Polyhedron Gravity Model}
 
-The gravitational attraction due to a constant density polyhedron is given as
-\begin{align*}
-	U(\vecbf{r}) &= 1\frac{1}{2} G \sigma \sum_{e \in \text{edges}} \vecbf{r}_e \cdot \vecbf{E}_e \cdot \vecbf{r}_e \cdot L_e - \frac{1}{2}G \sigma \sum_{f \in \text{faces}} \vecbf{r}_f \cdot \vecbf{F}_f \cdot \vecbf{r}_f \cdot \omega_f 
-\end{align*}
-where \( \vecbf{r}_e, \vecbf{r}_f \) is the vector from the spacecraft to any point on the respective edge or face.
-The polyhedron is defined by an array of vectors in the body fixed frame which define the vertices of the body.
-Triangular faces are defined as the plane created by any three vertices. 
-Consider three vectors \( \vecbf{v}_0, \vecbf{v}_1, \vecbf{v}_2 \), assumed to be ordered in a counterclockwise direction, which define a face. 
-The outward normal vector to the face and to each edge is defined as
-\begin{align*}
-	\hat{\vecbf{n}}_f &= \parenth{\vecbf{v}_{1} - \vecbf{v}_0} \times \parenth{\vecbf{v}_{2} - \vecbf{v}_1} ,\\
-	\hat{\vecbf{n}}_{e} &= \parenth{\vecbf{v}_{i+1} - \vecbf{v}_i} \times \hat{\vecbf{n}}_f .
-\end{align*}
-Using these normal vectors we define two dyads
-\begin{align*}
-	\vecbf{E}_e &= \hat{\vecbf{n}}_A \hat{\vecbf{n}}_{12}^A + \hat{\vecbf{n}}_B \hat{\vecbf{n}}_{21}^B ,\\
+We represent the gravitational potential of the asteroid using a polyhedron gravitation model.
+This model is composed of a polyhedron, a three-dimensional solid body, which is defined by a series of vectors in the body-fixed frame.
+The vectors define vertices in the body-fixed frame as well as planar faces which compose the surface of the asteroid.
+We assume that each face is a triangle composed of three vertices and three edges.
+As a result, only two faces meet at each edge while three faces meet at each vertex. 
+Several asteroids have been accurately mapped from a combination of Earth based sensors as well as visiting spacecraft (CITE \href{http://sbn.psi.edu/pds/resource/rshape.html}{http://sbn.psi.edu/pds/resource/rshape.html}). 
+Only the body-fixed vectors, and their associated topology, is required to define the exterior gravitational model.
+References~\citenum{werner1994} and~\citenum{werner1997} give a detailed derivation of the polyhedron model from first principles.
+Here, we summarize the key developments and equations required for implementation and clarity.
+
+Insert picture of face and vectors
+
+Consider three vectors \( \vecbf{v}_1, \vecbf{v}_2, \vecbf{v}_3 \), assumed to be ordered in a counterclockwise direction, which define a face. 
+It is easy to define the three edges of each face as
+\begin{align}\label{eq:edges}
+	\vecbf{e}_{i+1,i} = \vecbf{v}_{i+1} - \vecbf{v}_i ,
+\end{align}
+where the index \( i \in \parenth{1,2,3} \) is used to permute all edges of each face. 
+Since each edge is a member of two faces, there exist two edges which are defined in opposite directions between the same vertices.
+We can also define the outward normal vector to face \( f\)  as
+\begin{align}\label{eq:face_normal}
+	\hat{\vecbf{n}}_f &= \parenth{\vecbf{v}_{2} - \vecbf{v}_1} \times \parenth{\vecbf{v}_{3} - \vecbf{v}_2} ,
+\end{align}
+and the outward facing normal vector to each edge as
+\begin{align}\label{eq:edge_normal}
+	\hat{\vecbf{n}}_{i+1,i}^f &= \parenth{\vecbf{v}_{i+1} - \vecbf{v}_i} \times \hat{\vecbf{n}}_f .
+\end{align}
+For each face we define the face dyad \( \vecbf{F}_f \) as
+\begin{align}\label{eq:face_dyad}
 	\vecbf{F}_f &= \hat{\vecbf{n}}_f \hat{\vecbf{n}}_f .
-\end{align*}
+\end{align}
+Each edge is a member of two faces and has an outward pointing edge normal vector, given in~\cref{eq:edge_normal}, perpindicular to both the edge and the face normal.
+For the edge connecting the vectors \( \vecbf{v}_1 \) and \( \vecbf{v}_2 \) which are shared between the faces \(A\) and \( B\) the per edge dyad is given by
+\begin{align}\label{eq:edge_dyad}
+	\vecbf{E}_{12} = \hat{\vecbf{n}}_A \hat{\vecbf{n}}_{12}^A + \hat{\vecbf{n}}_B \hat{\vecbf{n}}_{21}^B .
+\end{align}
 The edge dyad \( \vecbf{E}_e \) is defined for each edge and a function of the two adjacent faces meeting at the edge. 
 The face dyad \( \vecbf{F}_f \) is defined for each face and is a function of the face normal vector.
 
 Let \( \vecbf{r}_i \) be the vector from the spacecraft to the vertex \( \vecbf{v}_i \) and it's length is \( r_i = \norm{\vecbf{r}_i} \).
 The per-edge factor \( L_e \), for the edge connecting vertices \( \vecbf{v}_i \) and \( \vecbf{v}_j \), with a constant length \( e_{ij} \) is 
-\begin{align*}
+\begin{align}\label{eq:edge_factor}
 	L_e &= \ln \frac{r_i + r_j + e_{ij}}{r_i + r_j - e_{ij}}.
-\end{align*}
-
+\end{align}
 For the face defined by the vertices \( \vecbf{v}_i, \vecbf{v}_j, \vecbf{v}_k \) the per-face factor \( \omega_f \) is
-\begin{align*}
+\begin{align}\label{eq:face_factor}
 	\omega_f &= 2 \arctan \frac{\vecbf{r}_i \cdot \vecbf{r}_j \times \vecbf{r}_k}{r_i r_j r_k + r_i \parenth{\vecbf{r}_j \cdot \vecbf{r}_k} + r_j \parenth{\vecbf{r}_k \cdot \vecbf{r}_i} + r_k \parenth{\vecbf{r}_i \cdot \vecbf{r}_j}} .
-\end{align*}
+\end{align}
+The gravitational potential due to a constant density polyhedron is given as
+\begin{align}\label{eq:potential}
+	U(\vecbf{r}) &= 1\frac{1}{2} G \sigma \sum_{e \in \text{edges}} \vecbf{r}_e \cdot \vecbf{E}_e \cdot \vecbf{r}_e \cdot L_e - \frac{1}{2}G \sigma \sum_{f \in \text{faces}} \vecbf{r}_f \cdot \vecbf{F}_f \cdot \vecbf{r}_f \cdot \omega_f 
+\end{align}
+where \( \vecbf{r}_e, \vecbf{r}_f \) is the vector from the spacecraft to any point on the respective edge or face.
+Furthermore we can use these definitions to define the attraction, gravity gradient matrix, and Laplacian are defined as
+\begin{align}
+	\nabla U ( \vecbf{r} ) &= -G \sigma \sum_{e \in \text{edges}} \vecbf{E}_e \cdot \vecbf{r}_e \cdot L_e + G \sigma \sum_{f \in \text{faces}} \vecbf{F}_f \cdot \vecbf{r}_f \cdot \omega_f , \label{eq:attraction}\\
+	\nabla \nabla U ( \vecbf{r} ) &= G \sigma \sum_{e \in \text{edges}} \vecbf{E}_e  \cdot L_e - G \sigma \sum_{f \in \text{faces}} \vecbf{F}_f \cdot \omega_f , \label{eq:gradient_matrix}\\
+	\nabla^2 U &= -G \sigma \sum_{f \in \text{faces}}  \omega_f \label{eq:laplacian}.
+\end{align}
 
-Using these definitions, the attraction, gravity gradient matrix, and Laplacian are defined as
-\begin{align*}
-	\nabla U ( \vecbf{r} ) &= -G \sigma \sum_{e \in \text{edges}} \vecbf{E}_e \cdot \vecbf{r}_e \cdot L_e + G \sigma \sum_{f \in \text{faces}} \vecbf{F}_f \cdot \vecbf{r}_f \cdot \omega_f ,\\
-	\nabla \nabla U ( \vecbf{r} ) &= G \sigma \sum_{e \in \text{edges}} \vecbf{E}_e  \cdot L_e - G \sigma \sum_{f \in \text{faces}} \vecbf{F}_f \cdot \omega_f , \\
-	\nabla^2 U &= -G \sigma \sum_{f \in \text{faces}}  \omega_f .
-\end{align*}
-
-One interesting thing to note is that both \( \vecbf{E}, \vecbf{F} \) can be precomputed without knowledge of the position of the satellite. 
-They are both solely functions of the vertices and edges of the polyhedral shape model.
-One a position vector \( \vecbf{r} \) is defined then the scalars \( \omega_f, L_e \) can be computed for each face and edge. 
-
-
-Duplicate the equations for polyhedron model
-
-Give an outline of how to compute the potential (which equations and order)
-
-Cite the original werner papers
+One interesting thing to note is that both~\cref{eq:face_dyad,eq:edge_dyad} can be precomputed without knowledge of the position of the satellite. 
+They are both solely functions of the vertices and edges of the polyhedral shape model and are computed once and stored.
+Once a position vector \( \vecbf{r} \) is defined then the scalars~\cref{eq:edge_factor,eq:face_factor} can be computed for each face and edge.
+Finally,~\cref{eq:potential} is used to compute the gravitational potential on the spacecraft.
 
 \subsection{Spacecraft Equations of Motion}
 
@@ -194,7 +211,7 @@ The body-fixed equations of motion of a massless particle about an arbitrarily r
 \begin{align}\label{eq:body_eoms}
 	\ddot{\vecbf{r}} + 2 \vecbf{\Omega} \times \dot{\vecbf{r}} + \vecbf{\Omega} \times \parenth{ \vecbf{\Omega} \times \vecbf{r} } + \dot{\vecbf{\Omega}} \times \vecbf{r} = U_{\vecbf{r}} , 
 \end{align}
-where \( \vecbf{\Omega} \) is the instaneous angular velocity vector of the asteroid represented in the body-fixed frame, \( \vecbf{r} \) is the position of the particle in the body-fixed frame, and \( U_{\vecbf{r}} \) is the gradient of the gravitational potential~\cite{greenwood1988}.
+where \( \vecbf{\Omega} \) is the instaneous angular velocity vector of the asteroid represented in the body-fixed frame, \( \vecbf{r} \) is the position of the particle in the body-fixed frame, and \( U_{\vecbf{r}} \) is the gradient of the gravitational potential~\cite{scheeres2012a}.
 We assume that the asteroid rotates at a uniform rate, \( \norm{\vecbf{\Omega}} = \omega \), about the axis of the maximum moment of inertia, \( \vecbf{\Omega} = \omega \hat{\vecbf{z} }\).
 As a result, we can represent the equations of motion in scalar form as
 \begin{align} \label{eq:eoms}
@@ -212,11 +229,26 @@ This is typical of many spacecraft which offer full rotational freedom and can d
 The equations of motion may be rewritten in state space form as
 \begin{align}\label{eq:state_space_eoms}
 	\begin{bmatrix} \dot{\vecbf{r}} \\ \dot{\vecbf{v}} \end{bmatrix} &=
+	\begin{bmatrix}\vecbf{v} \\ \vecbf{g} \parenth{\vecbf{r}} + \vecbf{h}\parenth{\vecbf{v}} + \vecbf{u} \end{bmatrix} ,
 \end{align}
-where the matrix \( G \) represents the 
+where the terms \(\vecbf{g} \parenth{\vecbf{r}} \) and \( \vecbf{h}\parenth{\vecbf{v}} \) are given by
+\begin{align}\label{eq:state_space_terms}
+	\vecbf{g}\parenth{\vecbf{r}} = \begin{bmatrix}  U_x + \omega^2 x \\ U_y + \omega^2 y \\ U_z \end{bmatrix} ,\quad
+	\vecbf{h}\parenth{\vecbf{r}} = \begin{bmatrix} 2 \omega \dot{y} \\ -2 \omega \dot{x} \\ 0 \end{bmatrix} .
+\end{align}
 
-Cite scheeres and his book
+Since Castalia is a uniformly rotating asteroid, the equations of motion are time invariant when represented in the body-fixed frame.
+In addition, there exists an integral of motion, or a conserved quantity, the is constant for all motion of a particle, absent any other perturbing forces.
+The Jacobi constant, \( J (\vecbf{r} , \vecbf{v} ) \), is given by
+\begin{align}\label{eq:jacobi}
+	J \parenth{\vecbf{r}, \vecbf{v}} = \frac{1}{2} \omega^2 \parenth{x^2 + y^2} + U(\vecbf{r}) - \frac{1}{2} \parenth{\dot{x}^2 + \dot{y}^2 + \dot{z}^2} .
+\end{align}
+The Jacobi constant functions in a similar manner as used in three-body problem~\cite{szebehely1967}.
+\Cref{eq:jacobi} divides the phase space into distinct realms of possible motion.
+We can define zero-velocity surfaces using the Jacobi constant by fixing the value to a desired constant.
+The zero-velocity surfaces are the locus of points where the kinetic energy and hence velocity vanishes.
 
+Figure of zero velocity surfaces for each of the three planes
 
 Jacobi constant
 
@@ -231,9 +263,9 @@ Periodic orbit computation summary. Cite Scheeres 2000 (Evaluation of the Dynami
 \section{Reachability Set on \Poincare Section}
 Define reachability set
 
-Define \Poincare section
+Define \Poincare section following the method of Scheeres
 
-\subsection{Optimal Control Formulation}
+4 dimensional \Poincare section so we need to discretize the direction using three angles
 
 Formulate OCP to generate the reachability set
 

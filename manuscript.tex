@@ -188,12 +188,35 @@ In this reference frame, the gravitational potential field is time invariant and
 In addition, since the rotational rate of the asteroid is constant the equations of motion are time invariant.
 Finally, the use of the rotating reference frame allows for much greater insight into the dynamic structure of the behavior around the asteroid.
 
-We define a reference frame originating at the center of mass of the asteroid. 
-  
+We define a reference frame originating at the center of mass of the asteroid.
+The body-fixed reference frame is composed of the unit vectors \( \hat{\vecbf{x}} , \hat{\vecbf{y}}, \hat{\vecbf{z}} \), which are aligned along the principal axes of smallest, intermediate, and largest moment of inertia, respectively.
+The body-fixed equations of motion of a massless particle about an arbitrarily rotating asteroid are given by
+\begin{align}\label{eq:body_eoms}
+	\ddot{\vecbf{r}} + 2 \vecbf{\Omega} \times \dot{\vecbf{r}} + \vecbf{\Omega} \times \parenth{ \vecbf{\Omega} \times \vecbf{r} } + \dot{\vecbf{\Omega}} \times \vecbf{r} = U_{\vecbf{r}} , 
+\end{align}
+where \( \vecbf{\Omega} \) is the instaneous angular velocity vector of the asteroid represented in the body-fixed frame, \( \vecbf{r} \) is the position of the particle in the body-fixed frame, and \( U_{\vecbf{r}} \) is the gradient of the gravitational potential~\cite{greenwood1988}.
+We assume that the asteroid rotates at a uniform rate, \( \norm{\vecbf{\Omega}} = \omega \), about the axis of the maximum moment of inertia, \( \vecbf{\Omega} = \omega \hat{\vecbf{z} }\).
+As a result, we can represent the equations of motion in scalar form as
+\begin{align} \label{eq:eoms}
+	\begin{split}
+    	\ddot{x} - 2 \omega \dot{y} - \omega^2 y &= U_x , \\
+    	\ddot{y} + 2 \omega \dot{x} - \omega^2 x &= U_y , \\
+    	\ddot{z} &= U_z .
+	\end{split}
+\end{align}
+
+We assume that in our problem we are modelling a spacecraft rather than a massless particle. 
+In this situation, the state is defined as \( \vecbf{x} = \begin{bmatrix}\vecbf{r} &\vecbf{v} \end{bmatrix}^T\) with \(\vecbf{r} = \begin{bmatrix} x & y & z \end{bmatrix}^T \in \R^{3\times1}\) and \(\vecbf{v}= \begin{bmatrix} \dot{x} & \dot{y} & \dot{z} \end{bmatrix}^T \in \R^{3\times1}\) representing the position and velocity with respect to the body-fixed frame, respectively.
+We further assume that our spacecraft is capable of exerting a translational force, \( \vecbf{u} \in \R^{3\times1} \), in any direction, while subject to a maximum magnitude constraint.
+This is typical of many spacecraft which offer full rotational freedom and can direct a maximum, and potentially varying, thrust in any direction.
+The equations of motion may be rewritten in state space form as
+\begin{align}\label{eq:state_space_eoms}
+	\begin{bmatrix} \dot{\vecbf{r}} \\ \dot{\vecbf{v}} \end{bmatrix} &=
+\end{align}
+where the matrix \( G \) represents the 
 
 Cite scheeres and his book
 
-Equations of motion
 
 Jacobi constant
 

@@ -59,7 +59,7 @@ In addition, these NEAs are also of concern for their potential to impact the Ea
 Asteroids and comets are the greatest threat to future civilizations and as a result there is a focused effort to mitigate these risks.
 In spite of the great interest in asteroids, the operation of spacecraft in thier vicinity is a challenging problem.
 
-% Difficulty in system model 
+% Difficulty in system model
 While there has been significant study of interplanetary transfer trajectories, relatively less analysis has been conducted on operations in the vicinity of asteroids.
 The dynamic environment of around asteroids is strongly perturbed and challenging for analysis and mission operation.
 Due to their small size and therefore low gravitational attraction asteroids have irregular shapes and potentially chaotic spin states.
@@ -75,22 +75,22 @@ Radio tracking data of an orbiting spacecraft allows one to estimate the series 
 The harmonic representation are guaranteed to converge outside of the circumscribing sphere and can be truncated at a finite order based on accuracy requirements.
 However, the harmonic expansion is always an approximation as a result of the infinite order series used in the representation.
 Additionally, the harmonic model used outside of the circumscribing sphere is not guaranteed to converge inside the sphere.
-As a result, additional steps must be taken to determine a valid harmonic expansion for particles close to the body. 
+As a result, additional steps must be taken to determine a valid harmonic expansion for particles close to the body.
 This results in a cumbersome gravity field model that requires additional constraints to ensure continuity and validity at the radius of the circumscribing sphere~\cite{werner1996}.
 Instead, we model the asteroid as a constant-density polyhedron and avoid the issues of the harmonic expansion while enabling several other useful advantages.
 
 % benefits of the polyhedron model
 A polyhedral model of the surface of an asteroid can be determined from remote optical or radar sensors.
-The faces of the polyhedron can be large or small and allows for fine detail such as depression, craters, ridges, or interior voids. 
+The faces of the polyhedron can be large or small and allows for fine detail such as depression, craters, ridges, or interior voids.
 In addition, there is no requirement for the body to be modeled at a uniformly high resolution so small details can be incorprated with minimal cost.
 From the shape model, an analytical, closed form expression for the gravitational potential can be derived.
 The polyhedral approach provides an accurate gravitational model consistent with the resolution of the shape and the chosen discretization.
-Furthermore, the polyhedron model is an exact solution up to the surface of the body. 
+Furthermore, the polyhedron model is an exact solution up to the surface of the body.
 Therefore, this model is ideal for missions traversing large region both close and far from the asteroid.
 
 % similarity to the three body problem
 The irregular shape of asteroids leads to a richer dynamics as compard to the familar Kepler's problem, which is based on a point mass assumption.
-The motion of particles around asteroids is modeled using the restricted full two-body problem. 
+The motion of particles around asteroids is modeled using the restricted full two-body problem.
 This model has many similarities with the restricted three body problem, and much of the theory developed there is also applicable.
 There has been much work in characterizing the relative equilibria and periodic orbits in the three-body problem.
 In addition, orbital transfers have been designed which exploit the invariant manifolds of the three-body problem for low-energy manuevers~\cite{mingotti2011,grebow2011}.
@@ -102,9 +102,9 @@ More recently, the invariant manifolds around asteroids have been proposed for o
 The application of optimal control methods for orbital trajectory design is nontrivial.
 In order to implement any optimization method a sufficiently accurate ``initial guess'' is required.
 Frequently, insight into the problem or intuition on the part of the designer is often required to determine initial conditions that will converge to the optimal solution.
-However, the asteroid system dynamics are nonlinear and exhibit chaotic behaviors. 
+However, the asteroid system dynamics are nonlinear and exhibit chaotic behaviors.
 This makes solving the optimization problem highly dependent on the initial condition.
-Similar to the three-body problem, there is an insufficient number of analytical constants to derive an analytical solution in general. 
+Similar to the three-body problem, there is an insufficient number of analytical constants to derive an analytical solution in general.
 As a result, accurate numerical methods are required to determine optimal solutions.
 These methods are critically dependent on accurate initial guess in order to allow for convergence to an optimal solution.
 
@@ -112,8 +112,8 @@ These methods are critically dependent on accurate initial guess in order to all
 % CAPTURE LONG TERM EFFECTS OF LOW THRUST ACCURATELY IN NUMERICAL SIMULATION
 In this paper, we extend the design method developed in the three-body problem to motion about asteroids~\cite{kulumani2015}.
 Our approach avoids the difficulties in selecting an appropriate initial guess for optimization.
-Instead, we utilize the concept of the reachability set to enable a simple methodology of selecting initial conditions to achieve general orbital transfers. 
-Given an initial condition and fixed time horizon, the reachable set is the set of states attainable, subject to the operational constraints of the spacecraft. 
+Instead, we utilize the concept of the reachability set to enable a simple methodology of selecting initial conditions to achieve general orbital transfers.
+Given an initial condition and fixed time horizon, the reachable set is the set of states attainable, subject to the operational constraints of the spacecraft.
 In addition, the generation of the reachable set allows for a more systematic method of determining initial conditions and eases the burden on the designer.
 This simple methodology allows for extended transfer trajectories which iteratively approach a desired target orbit.
 
@@ -135,20 +135,19 @@ We represent the gravitational potential of the asteroid using a polyhedron grav
 This model is composed of a polyhedron, a three-dimensional solid body, which is defined by a series of vectors in the body-fixed frame.
 The vectors define vertices in the body-fixed frame as well as planar faces which compose the surface of the asteroid.
 We assume that each face is a triangle composed of three vertices and three edges.
-As a result, only two faces meet at each edge while three faces meet at each vertex. 
-Several asteroids have been accurately mapped from a combination of Earth based sensors as well as visiting spacecraft (CITE \href{http://sbn.psi.edu/pds/resource/rshape.html}{http://sbn.psi.edu/pds/resource/rshape.html}). 
+As a result, only two faces meet at each edge while three faces meet at each vertex.
 Only the body-fixed vectors, and their associated topology, is required to define the exterior gravitational model.
-References~\citenum{werner1994} and~\citenum{werner1997} give a detailed derivation of the polyhedron model from first principles.
+References~\citenum{werner1994} and~\citenum{werner1997} give a detailed derivation of the polyhedron model.
 Here, we summarize the key developments and equations required for implementation and clarity.
 
-Insert picture of face and vectors
+{\LARGE Insert picture of face and vectors}
 
-Consider three vectors \( \vecbf{v}_1, \vecbf{v}_2, \vecbf{v}_3 \), assumed to be ordered in a counterclockwise direction, which define a face. 
+Consider three vectors \( \vecbf{v}_1, \vecbf{v}_2, \vecbf{v}_3 \), assumed to be ordered in a counterclockwise direction, which define a face.
 It is easy to define the three edges of each face as
 \begin{align}\label{eq:edges}
 	\vecbf{e}_{i+1,i} = \vecbf{v}_{i+1} - \vecbf{v}_i ,
 \end{align}
-where the index \( i \in \parenth{1,2,3} \) is used to permute all edges of each face. 
+where the index \( i \in \parenth{1,2,3} \) is used to permute all edges of each face.
 Since each edge is a member of two faces, there exist two edges which are defined in opposite directions between the same vertices.
 We can also define the outward normal vector to face \( f\)  as
 \begin{align}\label{eq:face_normal}
@@ -167,11 +166,11 @@ For the edge connecting the vectors \( \vecbf{v}_1 \) and \( \vecbf{v}_2 \) whic
 \begin{align}\label{eq:edge_dyad}
 	\vecbf{E}_{12} = \hat{\vecbf{n}}_A \hat{\vecbf{n}}_{12}^A + \hat{\vecbf{n}}_B \hat{\vecbf{n}}_{21}^B .
 \end{align}
-The edge dyad \( \vecbf{E}_e \) is defined for each edge and a function of the two adjacent faces meeting at the edge. 
+The edge dyad \( \vecbf{E}_e \) is defined for each edge and a function of the two adjacent faces meeting at the edge.
 The face dyad \( \vecbf{F}_f \) is defined for each face and is a function of the face normal vector.
 
 Let \( \vecbf{r}_i \) be the vector from the spacecraft to the vertex \( \vecbf{v}_i \) and it's length is \( r_i = \norm{\vecbf{r}_i} \).
-The per-edge factor \( L_e \), for the edge connecting vertices \( \vecbf{v}_i \) and \( \vecbf{v}_j \), with a constant length \( e_{ij} \) is 
+The per-edge factor \( L_e \), for the edge connecting vertices \( \vecbf{v}_i \) and \( \vecbf{v}_j \), with a constant length \( e_{ij} \) is
 \begin{align}\label{eq:edge_factor}
 	L_e &= \ln \frac{r_i + r_j + e_{ij}}{r_i + r_j - e_{ij}}.
 \end{align}
@@ -181,9 +180,9 @@ For the face defined by the vertices \( \vecbf{v}_i, \vecbf{v}_j, \vecbf{v}_k \)
 \end{align}
 The gravitational potential due to a constant density polyhedron is given as
 \begin{align}\label{eq:potential}
-	U(\vecbf{r}) &= 1\frac{1}{2} G \sigma \sum_{e \in \text{edges}} \vecbf{r}_e \cdot \vecbf{E}_e \cdot \vecbf{r}_e \cdot L_e - \frac{1}{2}G \sigma \sum_{f \in \text{faces}} \vecbf{r}_f \cdot \vecbf{F}_f \cdot \vecbf{r}_f \cdot \omega_f 
+	U(\vecbf{r}) &= 1\frac{1}{2} G \sigma \sum_{e \in \text{edges}} \vecbf{r}_e \cdot \vecbf{E}_e \cdot \vecbf{r}_e \cdot L_e - \frac{1}{2}G \sigma \sum_{f \in \text{faces}} \vecbf{r}_f \cdot \vecbf{F}_f \cdot \vecbf{r}_f \cdot \omega_f
 \end{align}
-where \( \vecbf{r}_e, \vecbf{r}_f \) is the vector from the spacecraft to any point on the respective edge or face.
+where \( \vecbf{r}_e, \vecbf{r}_f \) is the vector from the spacecraft to any point on the respective edge or face, \( G\) is the universal gravitational constant, and \( \sigma \) is the constant density of the asteroid.
 Furthermore we can use these definitions to define the attraction, gravity gradient matrix, and Laplacian are defined as
 \begin{align}
 	\nabla U ( \vecbf{r} ) &= -G \sigma \sum_{e \in \text{edges}} \vecbf{E}_e \cdot \vecbf{r}_e \cdot L_e + G \sigma \sum_{f \in \text{faces}} \vecbf{F}_f \cdot \vecbf{r}_f \cdot \omega_f , \label{eq:attraction}\\
@@ -191,10 +190,29 @@ Furthermore we can use these definitions to define the attraction, gravity gradi
 	\nabla^2 U &= -G \sigma \sum_{f \in \text{faces}}  \omega_f \label{eq:laplacian}.
 \end{align}
 
-One interesting thing to note is that both~\cref{eq:face_dyad,eq:edge_dyad} can be precomputed without knowledge of the position of the satellite. 
+One interesting thing to note is that both~\cref{eq:face_dyad,eq:edge_dyad} can be precomputed without knowledge of the position of the satellite.
 They are both solely functions of the vertices and edges of the polyhedral shape model and are computed once and stored.
-Once a position vector \( \vecbf{r} \) is defined then the scalars~\cref{eq:edge_factor,eq:face_factor} can be computed for each face and edge.
+Once a position vector \( \vecbf{r} \) is defined then the scalars given in~\cref{eq:edge_factor,eq:face_factor} can be computed for each face and edge.
 Finally,~\cref{eq:potential} is used to compute the gravitational potential on the spacecraft.
+
+In this work, we consider trajectories about asteroid 4769 Castalia.
+The shape model uses Doppler radar images to Castalia obstained at the Arecibo Observatory in 1989~\cite{hudson1994,neese2004}.
+We use the estimated rotation period of \SI{4.07}{\hour} with a nominal density of \SI{2.1}{\gram\per\centi\meter\cubed}~\cite{scheeres1996}.
+The shape model is composed of \num{4092} triangular faces and a rendering of the asteroid is provided in~\cref{fig:castalia_3d}.
+In addition, we also show a contour plot of the radius of Castlia in~\cref{fig:radius_contour}.
+\begin{figure}
+	\centering
+	\begin{subfigure}[htbp]{0.5\textwidth}
+		\includegraphics[width=\textwidth]{castalia}
+		\caption{3D Shape Model of Castalia} \label{fig:castalia_3d}
+	\end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line)
+	\begin{subfigure}[htbp]{0.5\textwidth}
+		\includegraphics[width=\textwidth]{radius_contour}
+		\caption{Radius contours of Castalia} \label{fig:radius_contour}
+	\end{subfigure} ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line)
+	\caption{Polyhedron Shape Model of 4769 Castalia}
+	\label{fig:castalia}
+\end{figure}
 
 \subsection{Spacecraft Equations of Motion}
 
@@ -209,7 +227,7 @@ We define a reference frame originating at the center of mass of the asteroid.
 The body-fixed reference frame is composed of the unit vectors \( \hat{\vecbf{x}} , \hat{\vecbf{y}}, \hat{\vecbf{z}} \), which are aligned along the principal axes of smallest, intermediate, and largest moment of inertia, respectively.
 The body-fixed equations of motion of a massless particle about an arbitrarily rotating asteroid are given by
 \begin{align}\label{eq:body_eoms}
-	\ddot{\vecbf{r}} + 2 \vecbf{\Omega} \times \dot{\vecbf{r}} + \vecbf{\Omega} \times \parenth{ \vecbf{\Omega} \times \vecbf{r} } + \dot{\vecbf{\Omega}} \times \vecbf{r} = U_{\vecbf{r}} , 
+	\ddot{\vecbf{r}} + 2 \vecbf{\Omega} \times \dot{\vecbf{r}} + \vecbf{\Omega} \times \parenth{ \vecbf{\Omega} \times \vecbf{r} } + \dot{\vecbf{\Omega}} \times \vecbf{r} = U_{\vecbf{r}} ,
 \end{align}
 where \( \vecbf{\Omega} \) is the instaneous angular velocity vector of the asteroid represented in the body-fixed frame, \( \vecbf{r} \) is the position of the particle in the body-fixed frame, and \( U_{\vecbf{r}} \) is the gradient of the gravitational potential~\cite{scheeres2012a}.
 We assume that the asteroid rotates at a uniform rate, \( \norm{\vecbf{\Omega}} = \omega \), about the axis of the maximum moment of inertia, \( \vecbf{\Omega} = \omega \hat{\vecbf{z} }\).
@@ -222,7 +240,7 @@ As a result, we can represent the equations of motion in scalar form as
 	\end{split}
 \end{align}
 
-We assume that in our problem we are modelling a spacecraft rather than a massless particle. 
+We assume that in our problem we are modelling a spacecraft rather than a massless particle.
 In this situation, the state is defined as \( \vecbf{x} = \begin{bmatrix}\vecbf{r} &\vecbf{v} \end{bmatrix}^T\) with \(\vecbf{r} = \begin{bmatrix} x & y & z \end{bmatrix}^T \in \R^{3\times1}\) and \(\vecbf{v}= \begin{bmatrix} \dot{x} & \dot{y} & \dot{z} \end{bmatrix}^T \in \R^{3\times1}\) representing the position and velocity with respect to the body-fixed frame, respectively.
 We further assume that our spacecraft is capable of exerting a translational force, \( \vecbf{u} \in \R^{3\times1} \), in any direction, while subject to a maximum magnitude constraint.
 This is typical of many spacecraft which offer full rotational freedom and can direct a maximum, and potentially varying, thrust in any direction.
@@ -244,26 +262,19 @@ The Jacobi constant, \( J (\vecbf{r} , \vecbf{v} ) \), is given by
 	J \parenth{\vecbf{r}, \vecbf{v}} = \frac{1}{2} \omega^2 \parenth{x^2 + y^2} + U(\vecbf{r}) - \frac{1}{2} \parenth{\dot{x}^2 + \dot{y}^2 + \dot{z}^2} .
 \end{align}
 The Jacobi constant functions in a similar manner as used in three-body problem~\cite{szebehely1967}.
-\Cref{eq:jacobi} divides the phase space into distinct realms of possible motion.
 We can define zero-velocity surfaces using the Jacobi constant by fixing the value to a desired constant.
 The zero-velocity surfaces are the locus of points where the kinetic energy and hence velocity vanishes.
-
-Figure of zero velocity surfaces for each of the three planes
-
-Jacobi constant
-
-Zero velocity curves
-
-Equilibrium points. Cite work done with triaxial ellipsoids and other Castalia papers
-
-\subsection{Determining Periodic Orbits}
-
-Periodic orbit computation summary. Cite Scheeres 2000 (Evaluation of the Dynamic environment of an asteroid)
+Just as in the three-body problem, the Jacobi constant in~\cref{eq:jacobi} divides the phase space into distinct realms of possible motion.
+Similarly, there exist in general four equilibrium points and also their associated stable and unstable manifolds~\cite{scheeres1996,scheeres1994}.
+The properties of these manifolds play a critical role in the dynamics of trajecotries in their vicinity.
 
 \section{Reachability Set on \Poincare Section}
+
+
 Define reachability set
 
-Define \Poincare section following the method of Scheeres
+Define \Poincare section following the method of Scheeres.
+It is used in the periodic orbit determination~\cite{}
 
 4 dimensional \Poincare section so we need to discretize the direction using three angles
 
@@ -288,7 +299,7 @@ Thruster magnitude is chosen to emulate some real thrusters - cite the Dawn pape
 
 A place to recognize others.
 
-\bibliographystyle{aiaa} 
+\bibliographystyle{aiaa}
 \bibliography{library}
 
 \end{document}

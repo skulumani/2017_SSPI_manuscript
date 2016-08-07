@@ -362,17 +362,37 @@ An optimal control problem is defined by the cost function
 \end{align}
 where \( \vecbf{x}_n(t_f) \) is the final state of a control-free trajectory, while the term \( \vecbf{x}(t_f)\) is the final state of a trajectory under the influence of the control input.
 Maximization of the distance between \( \vecbf{x}_n \) and \(\vecbf{x} \), on the \Poincare section defined in~\cref{eq:poincare_section}, is equivalent to the minimization of \( J \) defined in~\cref{eq:cost}.
-We ensure that the trajectories 
-Define reachability set
+We ensure that the trajectories intersect the \Poincare section through the use of terminal constraints.
+In addition, we use the terminal constraints to define a specific direction along which we seek to minimize the cost~\cref{eq:cost}.
+Since the \Poincare section is four-dimensional we parameterize a direction in \( \R^4 \)  using three angles \( \phi_1, \phi_2 , \phi_3 \) to define the terminal constraints
+\begin{align}\label{eq:terminal_constraints}
+    \begin{split}
+        m_1 &= y = 0 \\
+        m_2 &= \parenth{\sin \phi_{1_{d}}} \parenth{ x_1^2 + x_2^2 + x_3^2 + x_4^2} - x_1^2 = 0, \\
+        m_3 &= \parenth{\sin \phi_{2_{d}}} \parenth{ x_2^2 + x_3^2 + x_4^2} - x_2^2 = 0, \\
+        m_4 &= \parenth{\sin \phi_{3_{d}}} \parenth{ 2 x_3^2 + 2 x_3 \sqrt{x_4^2 + 2 x_4^2}} - x_3 - \sqrt{x_4^2 + x_3^2} = 0. 
+    \end{split}
+\end{align}
+We make use of the difference states \( \parenth{x_1, x_2 ,x_3, x_4 }\) which are defined as
+\begin{align}\label{eq:diff_states}
+    \begin{split}
+        x_1 &= x(t_f) - x_n(t_f) , \\
+        x_2 &= z(t_f) - z_n(t_f) , \\
+        x_3 &= \dot{x}(t_f) - \dot{x}_n(t_f) , \\
+        x_4 &= \dot{z}(t_f) - \dot{z}_n(t_f) . \\
+    \end{split}
+\end{align}
+The constraint \( m_1 = 0 \) ensures that the terminal states lies on the \Poincare section.
+The constraints \( m_2, m_3, m_4 \) are used to define a direction on the \Poincare section.
+Finally, we also incorporate a control thrust magnitude constraint given by
+\begin{align}\label{eq:control_constraint}
+    \vecbf{u}^T \vecbf{u} - u_m^2 \leq 0 ,
+\end{align}
+where \( u_m \) is the maximum thrust magnitude.
+This constraint assumes that the control thrust may be orientated in any direction yet the thrust is variable but limited.
+The goal is to determine the control history \( \vecbf{u}(t) \) such that teh cost function~\cref{eq:cost} is minimized while subject to the equations of motion~\cref{eq:body_eoms} and the constraints~\cref{eq:control_constraint,eq:terminal_constraints}.
 
-Define \Poincare section following the method of Scheeres.
-It is used in the periodic orbit determination.
-
-4 dimensional \Poincare section so we need to discretize the direction using three angles
-
-Formulate OCP to generate the reachability set
-
-Discuss the constraints and angles on the four dimensional space of the section
+% How do you solve the optimal control problem
 
 \section{Numerical Simulation}\label{sec:simulation}
 

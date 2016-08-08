@@ -386,13 +386,47 @@ The constraint \( m_1 = 0 \) ensures that the terminal states lies on the \Poinc
 The constraints \( m_2, m_3, m_4 \) are used to define a direction on the \Poincare section.
 Finally, we also incorporate a control thrust magnitude constraint given by
 \begin{align}\label{eq:control_constraint}
-    \vecbf{u}^T \vecbf{u} - u_m^2 \leq 0 ,
+    c(\vecbf{u}) = \vecbf{u}^T \vecbf{u} - u_m^2 \leq 0 ,
 \end{align}
 where \( u_m \) is the maximum thrust magnitude.
 This constraint assumes that the control thrust may be orientated in any direction yet the thrust is variable but limited.
 The goal is to determine the control history \( \vecbf{u}(t) \) such that teh cost function~\cref{eq:cost} is minimized while subject to the equations of motion~\cref{eq:body_eoms} and the constraints~\cref{eq:control_constraint,eq:terminal_constraints}.
 
 % How do you solve the optimal control problem
+We apply a standard calculus of variations approach to solve our optimal control problem~\cite{bryson2002}.
+Using the Euler-Lagrange equations we arrive at the necessary conditions for optimality
+\begin{align}\label{eq:necc_conditions}
+    \begin{split}
+        \dot{\vecbf{x}} ^T &= \deriv{H}{\vecbf{\lambda}} ,\\
+        \dot{\vecbf{\lambda}}^T &= \deriv{H}{\vecbf{x}} , \\
+        0 &= \deriv{\phi}{x}^T + \deriv{\vecbf{m}}{x}^T \vecbf{\beta} - \vecbf{\lambda}^T(t_f) , \\
+        0 &= \deriv{H}{\vecbf{u}} + \mu^T \deriv{c}{\vecbf{u}} ,
+    \end{split}
+\end{align}
+where the Hamiltonian, \( H\), is defined as
+\begin{align}\label{eq:hamiltonian}
+    H = \vecbf{\lambda}_r^T \vecbf{v} + \vecbf{\lambda}_v^T \parenth{\vecbf{g}(\vecbf{r}) + \vecbf{h}(\vecbf{v}) + \vecbf{u}}.
+\end{align}
+The costate is given by \( \vecbf{\lambda} = \begin{bmatrix} \vecbf{\lambda}_r & \vecbf{\lambda}_v \end{bmatrix}^T \in \R^{6 \times 1}\), \( \vecbf{\beta} \in \R^{4 \times 1} \) are the additional Lagrange multiplers associated with the terminal constraints in~\cref{eq:terminal_constraints}, and \( \mu \) is a Lagrange multipler associated with the control constraint in~\cref{eq:control_constraint}.
+
+We can redefine the optimal control in terms of the costate by rewritting the necessary condition as
+\begin{align*}
+    \vecbf{u} = - \frac{u_m^2}{2 \mu} \vecbf{\lambda}_v .
+\end{align*}
+We use this along with the control constraint to solve for the Lagrange multipler \( \mu \)
+\begin{align*}
+    \mu = \pm \frac{u_m}{2} \norm{\vecbf{\lambda}_v} .
+\end{align*}
+Finally, we use the second-order necessary condition to determine the correct sign of \( \mu \) and find the optimal control input for the reachable set as
+\begin{align}\label{eq:optimal_control}
+    \vecbf{u} = - u_m \frac{\vecbf{\lambda}}{\norm{\vecbf{\lambda}}} .
+\end{align}
+
+This optimal control formulation results in a two point boundary value problem.
+We use a shooting method to determine the initial costates, \( \vecbf{\lambda}(t_0)\), such that the terminal constraints are satisfied.
+In addition, we implement a multiple shooting method which sub-divides the the entire trajectory into small sub-intervals~\cite{stoer2013}.
+We incorporate additional interior constraints to ensure a continuous trajectory at the patch points between the sub-intervals.
+The multiple shooting method reduces the sensitivity of the terminal states to the initial conditions and alleviates many of the issues of single shooting approaches.
 
 \section{Numerical Simulation}\label{sec:simulation}
 

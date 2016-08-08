@@ -430,18 +430,94 @@ The multiple shooting method reduces the sensitivity of the terminal states to t
 
 \section{Numerical Simulation}\label{sec:simulation}
 
+We present an example transfer of a spacecraft about the asteroid 4769 Castalia. 
+Our equations of motion, given by~\cref{eq:eoms}, are an idealized version of the dynamics of a spacecraft.
+For example, the model does not include the effect of mass transfer from propellant usage. 
+We instead model the control input as a generic acceleration vector in the body-fixed asteroid frame. 
+The thrust magnitude constraint in~\cref{eq:control_constraint} is chosen to emulate a physically realizable thruster system.
+In this analysis, we assume \( u_m = \SI{0.1}{\milli\meter\per\second\squared}\) which is equivalent to a thrust of approximately \SI{100}{\milli\newton} for a \SI{1000}{\kilo\gram} spacecraft.
+This amount of thrust is typical of many current ion or hall effect thrusters and is in operation in several current missions (cite Goebels Fundamentals of electric propulsion and Dawn thruster paper by choueiri2009new).
+
+The objective is to transfer the spacecraft between two periodic equatorial orbits about Castalia.
+The initial and target orbits are periodic solutions about Castlia computed using the method introduced by Reference~\citenum{scheeres2003}.
+The initial conditions for both orbits are defined in the body-fixed frame as
+\begin{align}\label{sec:initial_transfer}
+    \vecbf{x}_i = 
+    \begin{bmatrix}
+        1.4973 \\ 0 \\ 0.0061 \\ 0\\ -0.0009 \\ 0
+    \end{bmatrix} ,
+    \quad
+    \vecbf{x}_t =
+    \begin{bmatrix}
+        2.9786 \\ 0 \\ 0.0012 \\ 0\\ -0.0011 \\ 0
+    \end{bmatrix} .
+\end{align}
+\Cref{fig:initial_transfer} shows the initial and desired periodic orbits which lie in the equatorial plane of Castalia.
+Our goal is to transfer from a lower altitude to a higher altitude while remaining in the equatorial plane of the asteroid.
+This type of scenario would occur frequently during mapping and observation missions to asteroids.
+\begin{figure}[htbp]
+    \centering 
+    \begin{subfigure}[htbp]{0.5\textwidth} 
+        \includegraphics[width=\textwidth]{initial_transfer} 
+        \caption{Equatorial View} \label{fig:eq_initial_transfer} 
+    \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
+    \begin{subfigure}[htbp]{0.5\textwidth} 
+        \includegraphics[width=\textwidth]{initial_transfer_3d} 
+        \caption{3D view} \label{fig:initial_transfer_3d} 
+    \end{subfigure} ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
+    \caption{Initial and target periodic orbits}
+    \label{fig:initial_transfer} 
+\end{figure}
+In this transfer example we also have used a reduced model of Castalia.
+Rather than using the full \num{4092} face model we reduce the number of faces to \num{1024}. 
+This greatly speeds up the computation with only a small difference in the potential field or shape model.
+
+We first compute the reachability set originating from the initial periodic orbit at \( \vecbf{x}_i\) for a fixed time of flight and bounded control magnitude as defined preivously.
+Since the target periodic orbit also lies in the equatorial plane, we augment~\cref{eq:terminal_constraints} with an additional constraint \( m_5 = z = 0\) to ensure that the trajectories remain in the equatorial plane.
+The reachability set is computed by solving the two-point boundary value problem using a multiple shooting algorithm to satisfy the necessary conditions in~\cref{eq:necc_conditions}.
+The reachability set is generated on the lower dimensional \Poincare section and is composed of the terminal states in the \( \parenth{x,z,\dot{x},\dot{z} } \) space.
+We visualize the section using the two figures in~\cref{fig:poincare_section}.
+\begin{figure}[htbp]
+    \centering 
+    \begin{subfigure}[htbp]{0.5\textwidth} 
+        \includegraphics[width=\textwidth]{figures/poincare_xvsxdot.pdf} 
+        \caption{\( x \) vs. \( \dot{x} \) \Poincare section} \label{fig:poincare_xvsxdot} 
+    \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
+    \begin{subfigure}[htbp]{0.5\textwidth} 
+        \includegraphics[width=\textwidth]{figures/poincare_zvszdot.pdf} 
+        \caption{\( z \) vs. \( \dot{z} \) \Poincare section} \label{fig:poincare_zvszdot} 
+    \end{subfigure}
+    \caption{\Poincare section visualization}
+    \label{fig:poincare_section} 
+\end{figure}
+These two-dimensional sections allow us to visualize the four-dimensional \Poincare section of~\cref{eq:poincare_section}.
+
+
+we use a lower number of faces to speed up the computation
+
+Transfer is between equatorial periodic orbits in the body fixed frame
+
+We compute the reachability set given a fixed initial state over a fixed time span
+
+We then determine the state(which is on the reachability set) which minimizes the distance to the target
+
+This state is used to intialize the next stage
+
+Repeat this until we can achieve both position coordinates on the various \Poincare sections
+
+The velocities do not match but a simple optimal control scheme is used to arrive at the target
+
 Transfer about asteroid Castalia - cite some Scheeres papers
 
 Plots of \Poincare section
 
 Full trajectory plots
 
-Thruster magnitude is chosen to emulate some real thrusters - cite the Dawn paper
 
 \section{Conclusions}\label{sec:conclusions}
 
 
-\section*{Acknowledgments}
+\section*{Acknowledgments}\label{sec:aknowledgments}
 
 A place to recognize others.
 

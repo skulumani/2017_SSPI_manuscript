@@ -384,6 +384,13 @@ We make use of the difference states \( \parenth{x_1, x_2 ,x_3, x_4 }\) which ar
 \end{align}
 The constraint \( m_1 = 0 \) ensures that the terminal states lies on the \Poincare section.
 The constraints \( m_2, m_3, m_4 \) are used to define a direction on the \Poincare section.
+We approximate the entire reachable set by discretizing the space of angles \(\phi_1, \phi_2, \phi_3 \).
+By convention we assume that the angles lie in the following range
+\begin{align*}
+    \phi_1, \phi_2 &\in [ 0, \pi ) ,\\
+    \phi_3 &\in [ 0 , 2 \pi ) ,
+\end{align*}
+such that we parameterize all directions on the three sphere, \(\S^3\).
 Finally, we also incorporate a control thrust magnitude constraint given by
 \begin{align}\label{eq:control_constraint}
     c(\vecbf{u}) = \vecbf{u}^T \vecbf{u} - u_m^2 \leq 0 ,
@@ -476,6 +483,8 @@ We first compute the reachability set originating from the initial periodic orbi
 Since the target periodic orbit also lies in the equatorial plane, we augment~\cref{eq:terminal_constraints} with an additional constraint \( m_5 = z = 0\) to ensure that the trajectories remain in the equatorial plane.
 The reachability set is computed by solving the two-point boundary value problem using a multiple shooting algorithm to satisfy the necessary conditions in~\cref{eq:necc_conditions}.
 The reachability set is generated on the lower dimensional \Poincare section and is composed of the terminal states in the \( \parenth{x,z,\dot{x},\dot{z} } \) space.
+We approximate the reachability set by discritizing each of the angles \( \phi_1, \phi_2 , \phi_3 \) into ten discrete steps. 
+This results in a total of \(10^3\) trajectories which approximate the reachability set on the \Poincare section.
 We visualize the section using the two figures in~\cref{fig:poincare_section}.
 \begin{figure}[htbp]
     \centering 
@@ -490,29 +499,66 @@ We visualize the section using the two figures in~\cref{fig:poincare_section}.
     \caption{\Poincare section visualization}
     \label{fig:poincare_section} 
 \end{figure}
-These two-dimensional sections allow us to visualize the four-dimensional \Poincare section of~\cref{eq:poincare_section}.
+These two-dimensional sections allow us to visualize the four-dimensional \Poincare section defined by~\cref{eq:poincare_section}.
+The first stage of the transfer is represented by the magenta markers in~\cref{fig:poincare_section}.
+From~\cref{fig:poincare_xvsxdot}, we can see that the reachablity set has grown in the \( \dot{x} \) dimension but has not been enlarged much in the \( x \) direction.
+Similarily,~\cref{fig:poincare_zvszdot} shows an increase in the \( \dot{z} \) component while still maintaining the \( z = 0 \) terminal constraint.
+From the reachability set, we chose a trajectory and terminal state which minimizes a distance metric \( d(\vecbf{x}_f,\vecbf{x}_t) \) to the desired target
+\begin{align}\label{eq:reach_dist}
+    d = \sqrt{k_x \parenth{x_f - x_t }^2 + k_z \parenth{z_f - z_t }^2 + k_{\dot{x}}\parenth{\dot{x}_f - \dot{x}_t }^2 + k_{\dot{z}}\parenth{\dot{z}_f - \dot{z}_t }^2} ,
+\end{align}
+where \( k_x, k_z, k_{\dot{x}}, k_{\dot{z}} \) are used to weight the relative importance of each of the components of the \Poincare section.
+\Cref{fig:phi_distance} shows the distance to the target for the chosen discretization of \( \phi_i \).
+\begin{figure}[htbp] 
+    \centering 
+    \begin{subfigure}[htbp]{0.3\textwidth} 
+        \includegraphics[width=\textwidth]{figures/phi1.pdf} 
+        \caption{ \( \phi_1 \)} \label{fig:phi1} 
+    \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
+    \begin{subfigure}[htbp]{0.3\textwidth} 
+        \includegraphics[width=\textwidth]{figures/phi2.pdf} 
+        \caption{\( \phi_2 \)} \label{fig:phi2} 
+    \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
+    \begin{subfigure}[htbp]{0.3\textwidth} 
+        \includegraphics[width=\textwidth]{figures/phi3.pdf} 
+        \caption{\( \phi_3 \)} \label{fig:phi3} 
+    \end{subfigure} 
+    \caption{Variation of \(d(\vecbf{x}_f,\vecbf{x}_t)\) due to varying \( \phi_i\)}
+    \label{fig:phi_distance} 
+\end{figure}
 
+The trajectory which minimizes \( d \) is indicated by the red marker in~\cref{fig:poincare_section ,fig:phi_distance}.
+Since the reachability set does not include the target we use the minimum state from the first stage to initialize another reachability computation.
+Once again we compute the reachability set by discritizing the space on the \Poincare section using the angles \( \phi_i \).
+This second stage, represented by the green markers in~\cref{fig:poincare_section,fig:phi_distance}, further increase the \( x \) component but does not reach the target orbit.
+As a result, a third stage is generated in a similar manner and shown by the green markers in~\cref{fig:poincare_section ,fig:phi_distance}.
+We can see in~\cref{fig:poincare_section} that the reachability set of the third stage includes both the \( x \) and \( z\) of the target periodic orbit.
+At the same time there is a relatively large difference between the \( \dot{x} \) and \( \dot{z} \) components of the third stage and the target orbit.
+In practice this is not a large concern as we have direct control over the spacecraft velocity via the control input.
 
-we use a lower number of faces to speed up the computation
+With the reachability set encompassing the target orbit, we can generate a final transfer to the target.
+We use the minimum state calculated from the final stage to serve as the initial condition of the transfer.
+A final optimal transfer is computed to satisfy the fixed terminal state \( \vecbf{x}(t_f) = \vecbf{x}_t \) and the bounded control magnitude constraint.
+\Cref{fig:trajectory} shows the entire transfer trajectory, from the three reachable set trajectories as well as the final transfer to the target.
+\begin{figure}[htbp] 
+    \centering 
+    \begin{subfigure}[htbp]{0.5\textwidth} 
+        \includegraphics[width=\textwidth]{figures/trajectory.pdf} 
+        \caption{Equatorial view of transfer} \label{fig:trajectory_up} 
+    \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
+    \begin{subfigure}[htbp]{0.5\textwidth} 
+        \includegraphics[width=\textwidth]{figures/trajectory_3d.pdf} 
+        \caption{Out of plane view} \label{fig:trajectory_3d} 
+    \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
+    \caption{Complete transfer trajectory}
+    \label{fig:trajectory} 
+\end{figure}
 
-Transfer is between equatorial periodic orbits in the body fixed frame
+The transfers show a large out of plane movement for a planar transfer
 
-We compute the reachability set given a fixed initial state over a fixed time span
+Show a plot of the control input
 
-We then determine the state(which is on the reachability set) which minimizes the distance to the target
-
-This state is used to intialize the next stage
-
-Repeat this until we can achieve both position coordinates on the various \Poincare sections
-
-The velocities do not match but a simple optimal control scheme is used to arrive at the target
-
-Transfer about asteroid Castalia - cite some Scheeres papers
-
-Plots of \Poincare section
-
-Full trajectory plots
-
+Mention somewhere up above that we're trying to determine a reachability set on a \Poincare section
 
 \section{Conclusions}\label{sec:conclusions}
 

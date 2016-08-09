@@ -9,7 +9,7 @@
     \thanks{Doctoral Student, \href{mailto:skulumani@gwu.edu}{skulumani@gwu.edu}. Student AIAA Member.}
   \ and Taeyoung Lee\thanksibid{2}\thanks{Associate Professor, \href{mailto:tylee@gwu.edu}{tylee@gwu.edu}. AIAA Member}\\
   {\normalsize\itshape
-   Mechanical and Aerospace Engineering, George Washington University, 800 22nd St NW, Washington DC }\\
+   George Washington University, Washington, District of Columbia }\\
    }
 
  % Data used by 'handcarry' option if invoked
@@ -21,30 +21,16 @@
 
 \maketitle
 
-\begin{abstract}
-Write an awesome abstract
+\begin{abstract}\label{sec:abstract}
 
-Use the reachability set to compute transfers
+We present a computational approach for the design of continuous low thrust transfers around asteroids.
+These transfers are computed through the use of a reachability set which is generated on a lower dimensional \Poincare surface.
+Computation of the reachable set alleviates the need to generate an accurate initial guess for optimization.
+Successive computation of the reachable set allows for the design of general transfer trajectories.
+We demonstrate this method by determining a transfer trajectory about the asteroid 4769 Castalia.
 
-extend work already done in three body problem to motion around asteroid
-
-Numerical example for asteroid 4769 Castalia
 \end{abstract}
 
-\section*{Nomenclature}
-
-\begin{tabbing}
-  XXX \= \kill% this line sets tab stop and adds a newline
-  $J$ \> Jacobian Matrix \\
-  $f$ \> Residual value vector \\
-  $x$ \> Variable value vector \\
-  $F$ \> Force, \si{\newton} \\
-  $m$ \> Mass, \si{\kilo\gram} \\
-  $\Delta x$ \> Variable displacement vector \\
-  $\alpha$ \> Acceleration, \si{\meter\per\second\squared} \\[5pt]
-  \textit{Subscript}\\
-  $i$ \> Variable number \\
-\end{tabbing}
 
 \section{Introduction}\label{sec:introduction}
 
@@ -120,14 +106,20 @@ This simple methodology allows for extended transfer trajectories which iterativ
 
 \section{Asteroid Model}\label{sec:asteroid_model}
 
-\subsection{Shape Model}
-Cite location of shape model database
+In this analysis we consider transfers about the asteroid 4769 Castalia.
+Castalia has an accurate shape model and it is also considered a potentially hazardous asteroid with a possibility of Earth impact~\cite{hudson1994}.
+We also model the graviational potential field of Castalia using a polyhedron gravity model instead of using a spherical harmonic expansion.
+The spherical harmonic expansion is a popular method of representing the gravity field~\cite{scheeres1996}.
+Approximations are possible by truncating the infinite order series to fixed set of coefficients, with the most important terms corresponding to the second order and degree~\cite{scheeres1994}.
+The approximation error is generally small given a sufficient amount of terms. 
+However, when evaluated close to the body the series expansion will diverge and is no longer accurate. 
 
-Cite Scheeres orbits close to 4769 Castalia
-
-Assuming constant rotation rate for asteroid
-
-Mention we're looking at asteroid 4769 Castalia
+In contrast, the polyhedron model results in an exact closed form expression of the gravitational potential field~\cite{werner1994}.
+In addition, the model results in the exact potential for the given shape
+However, the calculation of the potential, or the acceleration, requires a summation over every face of the polyhedron. 
+As a result, it typically requires a large amount of computation in contrast to the harmonic expansion. 
+However, the formulation is well suited to parallelization and improvements with efficient coding practices. 
+Finally, the polyhedron method is well suited to trajectories passing close to the body and offers a simple metric to determine if a particle is inside the asteroid.
 
 \subsection{Polyhedron Gravity Model}\label{sec:polyhedron_model}
 
@@ -138,9 +130,7 @@ We assume that each face is a triangle composed of three vertices and three edge
 As a result, only two faces meet at each edge while three faces meet at each vertex.
 Only the body-fixed vectors, and their associated topology, is required to define the exterior gravitational model.
 References~\citenum{werner1994} and~\citenum{werner1997} give a detailed derivation of the polyhedron model.
-Here, we summarize the key developments and equations required for implementation and clarity.
-
-{\LARGE Insert picture of face and vectors}
+Here, we summarize the key developments and equations required for implementation.
 
 Consider three vectors \( \vecbf{v}_1, \vecbf{v}_2, \vecbf{v}_3 \), assumed to be ordered in a counterclockwise direction, which define a face.
 It is easy to define the three edges of each face as
@@ -202,11 +192,11 @@ The shape model is composed of \num{4092} triangular faces and a rendering of th
 In addition, we also show a contour plot of the radius of Castlia in~\cref{fig:radius_contour}.
 \begin{figure}
     \centering
-    \begin{subfigure}[htbp]{0.5\textwidth}
+    \begin{subfigure}[htbp]{0.45\textwidth}
         \includegraphics[width=\textwidth]{castalia}
         \caption{3D Shape Model of Castalia} \label{fig:castalia_3d}
     \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line)
-    \begin{subfigure}[htbp]{0.5\textwidth}
+    \begin{subfigure}[htbp]{0.45\textwidth}
         \includegraphics[width=\textwidth]{radius_contour}
         \caption{Radius contours of Castalia} \label{fig:radius_contour}
     \end{subfigure} ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line)
@@ -290,7 +280,7 @@ Here, we use numerical methods to solve an optimal control problem.
 The solution of this optimal control problem approximates a single solution that lies on the reachable set.
 \begin{figure}
     \centering
-    \begin{scaletikzpicturetowidth}{0.5\textwidth}
+    \begin{scaletikzpicturetowidth}{0.3\textwidth}
     \begin{tikzpicture}[scale=\tikzscale]
         \coordinate [label=left:\textcolor{black}{\large \(\vec{x}_0\)}] (x0) at (-1,-2);
         \coordinate [label=below:\textcolor{black}{\large  \(\vec{x}_n\)}] (xn) at (1,1);
@@ -339,7 +329,7 @@ Maximization of \( J \), or the minimization of \( -J \), along various directio
 
 We define the \Poincare section as the surface normal to \( y = 0 \).
 Following convention, the \Poincare map is defined as the map from one transversal crossing of the surface \( y = 0\) to the next.
-Using the method of Reference~\cite{scheeres2000}, we are able to remove \( y \) and \( \dot{y} \), creating a four-dimensional map.
+Using the method of Reference~\citenum{scheeres2000}, we are able to remove \( y \) and \( \dot{y} \), creating a four-dimensional map.
 The \Poincare section, \( \Sigma \) then becomes
 \begin{align}\label{eq:poincare_section}
     \Sigma = \braces{\parenth{x, \dot{x}, z, \dot{z}} | y(t_f) = 0 }.
@@ -464,11 +454,11 @@ Our goal is to transfer from a lower altitude to a higher altitude while remaini
 This type of scenario would occur frequently during mapping and observation missions to asteroids.
 \begin{figure}[htbp]
     \centering 
-    \begin{subfigure}[htbp]{0.5\textwidth} 
+    \begin{subfigure}[htbp]{0.45\textwidth} 
         \includegraphics[width=\textwidth]{initial_transfer} 
         \caption{Equatorial View} \label{fig:eq_initial_transfer} 
     \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
-    \begin{subfigure}[htbp]{0.5\textwidth} 
+    \begin{subfigure}[htbp]{0.45\textwidth} 
         \includegraphics[width=\textwidth]{initial_transfer_3d} 
         \caption{3D view} \label{fig:initial_transfer_3d} 
     \end{subfigure} ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
@@ -488,11 +478,11 @@ This results in a total of \(10^3\) trajectories which approximate the reachabil
 We visualize the section using the two figures in~\cref{fig:poincare_section}.
 \begin{figure}[htbp]
     \centering 
-    \begin{subfigure}[htbp]{0.5\textwidth} 
+    \begin{subfigure}[htbp]{0.45\textwidth} 
         \includegraphics[width=\textwidth]{figures/poincare_xvsxdot.pdf} 
         \caption{\( x \) vs. \( \dot{x} \) \Poincare section} \label{fig:poincare_xvsxdot} 
     \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
-    \begin{subfigure}[htbp]{0.5\textwidth} 
+    \begin{subfigure}[htbp]{0.45\textwidth} 
         \includegraphics[width=\textwidth]{figures/poincare_zvszdot.pdf} 
         \caption{\( z \) vs. \( \dot{z} \) \Poincare section} \label{fig:poincare_zvszdot} 
     \end{subfigure}
@@ -523,7 +513,7 @@ where \( k_x, k_z, k_{\dot{x}}, k_{\dot{z}} \) are used to weight the relative i
         \includegraphics[width=\textwidth]{figures/phi3.pdf} 
         \caption{\( \phi_3 \)} \label{fig:phi3} 
     \end{subfigure} 
-    \caption{Variation of \(d(\vecbf{x}_f,\vecbf{x}_t)\) due to varying \( \phi_i\)}
+    \caption{Variation of \(d(\vecbf{x}_f,\vecbf{x}_t)\) due to \( \phi_i\)}
     \label{fig:phi_distance} 
 \end{figure}
 
@@ -542,30 +532,36 @@ A final optimal transfer is computed to satisfy the fixed terminal state \( \vec
 \Cref{fig:trajectory} shows the entire transfer trajectory, from the three reachable set trajectories as well as the final transfer to the target.
 \begin{figure}[htbp] 
     \centering 
-    \begin{subfigure}[htbp]{0.5\textwidth} 
+    \begin{subfigure}[htbp]{0.45\textwidth} 
         \includegraphics[width=\textwidth]{figures/trajectory.pdf} 
         \caption{Equatorial view of transfer} \label{fig:trajectory_up} 
     \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
-    \begin{subfigure}[htbp]{0.5\textwidth} 
+    \begin{subfigure}[htbp]{0.45\textwidth} 
         \includegraphics[width=\textwidth]{figures/trajectory_3d.pdf} 
         \caption{Out of plane view} \label{fig:trajectory_3d} 
     \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
     \caption{Complete transfer trajectory}
     \label{fig:trajectory} 
 \end{figure}
-
+It is interesting to note the while both the initial and target periodic orbit lie in the equatorial plane, the reachablity trajectories show a relatively large out of plane component during the transfers.
+In spite of this out of plane movement, the reachability set approaches and meets the target orbit. 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.45\textwidth]{figures/control.pdf}
+    \caption{Control history \label{fig:control}}
+\end{figure}
+\Cref{fig:control} shows the control input required during the manuever.
 The transfers show a large out of plane movement for a planar transfer
-
-Show a plot of the control input
-
-Mention somewhere up above that we're trying to determine a reachability set on a \Poincare section
+We can see that the control constraint in~\cref{eq:control_constraint} is satisfied over the entire trajectory.
 
 \section{Conclusions}\label{sec:conclusions}
 
-
-\section*{Acknowledgments}\label{sec:aknowledgments}
-
-A place to recognize others.
+In this paper, an optimal transfer process, which combines the concepts of reachability and \Poincare section, is used to generate a transfer between periodic orbits about the asteroid 4769 Castalia.
+We have linked several computations of the reachability set on a \Poincare section in order to design a transfer trajectory.
+The use of the \Poincare section allows for trajectory design on a lower dimensional space and is an extension of its well-known use in the analysis of periodic orbits.
+We use an indirect optimal control formulation to incorporate a control magnitude contraint and several terminal state constraints.
+Utilizing the reachability set alleviates the need to determine accurate initial conditions that allow for convergence of the optimal solution.
+In addition, the use of the polyhedron gravitational model gives simple method of extending this work to any small body that also posseses a defined shape model.
 
 \bibliographystyle{aiaa}
 \bibliography{library}

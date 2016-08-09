@@ -24,7 +24,7 @@
 \begin{abstract}\label{sec:abstract}
 
 We present a computational approach for the design of continuous low thrust transfers around asteroids.
-These transfers are computed through the use of a reachability set which is generated on a lower dimensional \Poincare surface.
+These transfers are computed through the use of a reachability set generated on a lower dimensional \Poincare surface.
 Computation of the reachable set alleviates the need to generate an accurate initial guess for optimization.
 Successive computation of the reachable set allows for the design of general transfer trajectories.
 We demonstrate this method by determining a transfer trajectory about the asteroid 4769 Castalia.
@@ -37,54 +37,35 @@ We demonstrate this method by determining a transfer trajectory about the astero
 % Motivation for missions/studying asteroids
 Small solar system bodies, such as asteroids and comets, are of significant interest to the scientific community.
 These small bodies offer great insight into the early formation of the solar system.
-This insight offers additional detail into the formation of the Earth and also the probable formation of other planetary systems.
+This insight offers additional detail into the formation of the Earth and also the probable formation of other planetary bodies.
 Of particular interest are those near-Earth asteroids (NEA) which inhabit heliocentric orbits in vicinity of the Earth.
 These easily accessible bodies provide attractive targets to support space industrialization, mining operations, and scientific missions..
 NEAs potentially contain many materials useful for propulsion, construction, semiconductors, precious and strategic metals~\cite{ross2001}.
 In addition, these NEAs are also of concern for their potential to impact the Earth~\cite{wie2008}.
 Asteroids and comets are the greatest threat to future civilizations and as a result there is a focused effort to mitigate these risks.
-In spite of the great interest in asteroids, the operation of spacecraft in thier vicinity is a challenging problem.
+In spite of the great interest in asteroids, the operation of spacecraft in their vicinity is a challenging problem.
 
 % Difficulty in system model
 While there has been significant study of interplanetary transfer trajectories, relatively less analysis has been conducted on operations in the vicinity of asteroids.
-The dynamic environment of around asteroids is strongly perturbed and challenging for analysis and mission operation.
-Due to their small size and therefore low gravitational attraction asteroids have irregular shapes and potentially chaotic spin states.
-Furthermore, due to the low gravitational attraction, other non-gravitional effects, such as solar radiation pressure, become more significant.
-The orbital enviornment is in general quite complex and analytical insights are difficult to generate.
+The dynamic environment around asteroids is strongly perturbed and challenging for analysis and mission operation.
+Due to their small size, resulting in a low gravitational attraction, asteroids have irregular shapes or potentially chaotic spin states.
+Furthermore, due to their low mass other non-gravitational effects, such as solar radiation pressure or third-body effects, become much more significant.
+As a result, the orbital environment is in general quite complex and it is difficult to generate analytical insights.
 
 % Must estimate gravity and shape from ground based optical measurements
 % most use a spherical harmonic model or a ellipsoid model but we use a polyhedron model
-An accurate gravitional potential model is neccessary for the operation of spacecraft about asteroids.
+An accurate gravitational potential model is necessary for the operation of spacecraft about asteroids.
 Additionally, a detailed shape model of the asteroid is needed for trajectories passing close to the body.
 The classic approach is to expand the gravitational potential into a harmonic series and compute the series coefficients.
 Radio tracking data of an orbiting spacecraft allows one to estimate the series coefficients.
-The harmonic representation are guaranteed to converge outside of the circumscribing sphere and can be truncated at a finite order based on accuracy requirements.
+The harmonic representation is guaranteed to converge outside of the circumscribing sphere and can be truncated at a finite order based on accuracy requirements.
 However, the harmonic expansion is always an approximation as a result of the infinite order series used in the representation.
 Additionally, the harmonic model used outside of the circumscribing sphere is not guaranteed to converge inside the sphere.
 As a result, additional steps must be taken to determine a valid harmonic expansion for particles close to the body.
-This results in a cumbersome gravity field model that requires additional constraints to ensure continuity and validity at the radius of the circumscribing sphere~\cite{werner1996}.
+This results in a cumbersome gravity field model that requires additional constraints to ensure continuity and validity at the radius of the circumscribing sphere~\cite{werner1994 ,werner1996}.
 Instead, we model the asteroid as a constant-density polyhedron and avoid the issues of the harmonic expansion while enabling several other useful advantages.
 
-% benefits of the polyhedron model
-A polyhedral model of the surface of an asteroid can be determined from remote optical or radar sensors.
-The faces of the polyhedron can be large or small and allows for fine detail such as depression, craters, ridges, or interior voids.
-In addition, there is no requirement for the body to be modeled at a uniformly high resolution so small details can be incorprated with minimal cost.
-From the shape model, an analytical, closed form expression for the gravitational potential can be derived.
-The polyhedral approach provides an accurate gravitational model consistent with the resolution of the shape and the chosen discretization.
-Furthermore, the polyhedron model is an exact solution up to the surface of the body.
-Therefore, this model is ideal for missions traversing large region both close and far from the asteroid.
-
-% similarity to the three body problem
-The irregular shape of asteroids leads to a richer dynamics as compard to the familar Kepler's problem, which is based on a point mass assumption.
-The motion of particles around asteroids is modeled using the restricted full two-body problem.
-This model has many similarities with the restricted three body problem, and much of the theory developed there is also applicable.
-There has been much work in characterizing the relative equilibria and periodic orbits in the three-body problem.
-In addition, orbital transfers have been designed which exploit the invariant manifolds of the three-body problem for low-energy manuevers~\cite{mingotti2011,grebow2011}.
-The similarity of the three-body problem to motion around astreroids allows for much of the same theory to be applied to the asteroid problem.
-More recently, the invariant manifolds around asteroids have been proposed for orbital transfers and landing manuevers~\cite{mondelo2010,herrera2014}.
-
 % use of low thrust propulsion
-
 The application of optimal control methods for orbital trajectory design is nontrivial.
 In order to implement any optimization method a sufficiently accurate ``initial guess'' is required.
 Frequently, insight into the problem or intuition on the part of the designer is often required to determine initial conditions that will converge to the optimal solution.
@@ -94,21 +75,24 @@ Similar to the three-body problem, there is an insufficient number of analytical
 As a result, accurate numerical methods are required to determine optimal solutions.
 These methods are critically dependent on accurate initial guess in order to allow for convergence to an optimal solution.
 
-% SYSTEMATIC DESIGN TO AVOID DIFFICULTIES IN CHOOSING A GOOD INITIAL GUESS
-% CAPTURE LONG TERM EFFECTS OF LOW THRUST ACCURATELY IN NUMERICAL SIMULATION
+% similarity to the three body problem
+The irregular shape of asteroids leads to a richer dynamics as compared to the familiar Kepler's problem.
+The motion of particles around asteroids is modeled using the restricted full two-body problem.
+This model has many similarities with the restricted three body problem, and much of the theory developed in the three-body problem is also applicable.
+The similarity of the three-body problem to motion around asteroids allows for much of the same theory to be applied to the asteroid problem~\cite{mondelo2010,herrera2014}.
 In this paper, we extend the design method developed in the three-body problem to motion about asteroids~\cite{kulumani2015}.
 Our approach avoids the difficulties in selecting an appropriate initial guess for optimization.
 Instead, we utilize the concept of the reachability set to enable a simple methodology of selecting initial conditions to achieve general orbital transfers.
 Given an initial condition and fixed time horizon, the reachable set is the set of states attainable, subject to the operational constraints of the spacecraft.
+We calculate the reachable set on a lower dimensional \Poincare section which allows a 
 In addition, the generation of the reachable set allows for a more systematic method of determining initial conditions and eases the burden on the designer.
 This simple methodology allows for extended transfer trajectories which iteratively approach a desired target orbit.
-
 
 \section{Asteroid Model}\label{sec:asteroid_model}
 
 In this analysis we consider transfers about the asteroid 4769 Castalia.
-Castalia has an accurate shape model and it is also considered a potentially hazardous asteroid with a possibility of Earth impact~\cite{hudson1994}.
-We also model the graviational potential field of Castalia using a polyhedron gravity model instead of using a spherical harmonic expansion.
+Castalia has an accurate shape model and is also considered a potentially hazardous asteroid with a possibility of Earth impact~\cite{hudson1994}.
+We model the gravitational potential field of Castalia using a polyhedron gravity model instead of using a spherical harmonic expansion.
 The spherical harmonic expansion is a popular method of representing the gravity field~\cite{scheeres1996}.
 Approximations are possible by truncating the infinite order series to fixed set of coefficients, with the most important terms corresponding to the second order and degree~\cite{scheeres1994}.
 The approximation error is generally small given a sufficient amount of terms. 
@@ -120,6 +104,15 @@ However, the calculation of the potential, or the acceleration, requires a summa
 As a result, it typically requires a large amount of computation in contrast to the harmonic expansion. 
 However, the formulation is well suited to parallelization and improvements with efficient coding practices. 
 Finally, the polyhedron method is well suited to trajectories passing close to the body and offers a simple metric to determine if a particle is inside the asteroid.
+
+% benefits of the polyhedron model
+A polyhedral model of the surface of an asteroid can be determined from remote optical or radar sensors.
+The faces of the polyhedron can be large or small and allows for fine detail such as depression, craters, ridges, or interior voids.
+In addition, there is no requirement for the body to be modeled at a uniformly high resolution so small details can be incorporated with minimal cost.
+From the shape model, an analytical, closed form expression for the gravitational potential can be derived.
+The polyhedral approach provides an accurate gravitational model consistent with the resolution of the shape and the chosen discretization.
+Furthermore, the polyhedron model is an exact solution up to the surface of the body.
+Therefore, this model is ideal for missions traversing large regions both close and far from the asteroid.
 
 \subsection{Polyhedron Gravity Model}\label{sec:polyhedron_model}
 
@@ -151,13 +144,13 @@ For each face we define the face dyad \( \vecbf{F}_f \) as
 \begin{align}\label{eq:face_dyad}
     \vecbf{F}_f &= \hat{\vecbf{n}}_f \hat{\vecbf{n}}_f .
 \end{align}
-Each edge is a member of two faces and has an outward pointing edge normal vector, given in~\cref{eq:edge_normal}, perpindicular to both the edge and the face normal.
-For the edge connecting the vectors \( \vecbf{v}_1 \) and \( \vecbf{v}_2 \) which are shared between the faces \(A\) and \( B\) the per edge dyad is given by
+Each edge is a member of two faces and has an outward pointing edge normal vector, given in~\cref{eq:edge_normal}, perpendicular to both the edge and the face normal.
+For the edge connecting the vectors \( \vecbf{v}_1 \) and \( \vecbf{v}_2 \) which are shared between the faces \(A\) and \( B\), the per edge dyad is given by
 \begin{align}\label{eq:edge_dyad}
     \vecbf{E}_{12} = \hat{\vecbf{n}}_A \hat{\vecbf{n}}_{12}^A + \hat{\vecbf{n}}_B \hat{\vecbf{n}}_{21}^B .
 \end{align}
-The edge dyad \( \vecbf{E}_e \) is defined for each edge and a function of the two adjacent faces meeting at the edge.
-The face dyad \( \vecbf{F}_f \) is defined for each face and is a function of the face normal vector.
+The edge dyad, \( \vecbf{E}_e \), is defined for each edge and a function of the two adjacent faces meeting at the edge.
+The face dyad, \( \vecbf{F}_f \), is defined for each face and is a function of the face normal vector.
 
 Let \( \vecbf{r}_i \) be the vector from the spacecraft to the vertex \( \vecbf{v}_i \) and it's length is \( r_i = \norm{\vecbf{r}_i} \).
 The per-edge factor \( L_e \), for the edge connecting vertices \( \vecbf{v}_i \) and \( \vecbf{v}_j \), with a constant length \( e_{ij} \) is
@@ -184,9 +177,10 @@ One interesting thing to note is that both~\cref{eq:face_dyad,eq:edge_dyad} can 
 They are both solely functions of the vertices and edges of the polyhedral shape model and are computed once and stored.
 Once a position vector \( \vecbf{r} \) is defined then the scalars given in~\cref{eq:edge_factor,eq:face_factor} can be computed for each face and edge.
 Finally,~\cref{eq:potential} is used to compute the gravitational potential on the spacecraft.
+The Laplacian, defined in~\cref{eq:laplacian}, gives a simple method to determine if the spacecraft has collided with the body~\cite{werner1996} 
 
 In this work, we consider trajectories about asteroid 4769 Castalia.
-The shape model uses Doppler radar images to Castalia obstained at the Arecibo Observatory in 1989~\cite{hudson1994,neese2004}.
+Doppler radar images, obtained at the Arecibo Observatory in 1989, are used to determine a shape model of Castalia~\cite{hudson1994,neese2004}.
 We use the estimated rotation period of \SI{4.07}{\hour} with a nominal density of \SI{2.1}{\gram\per\centi\meter\cubed}~\cite{scheeres1996}.
 The shape model is composed of \num{4092} triangular faces and a rendering of the asteroid is provided in~\cref{fig:castalia_3d}.
 In addition, we also show a contour plot of the radius of Castlia in~\cref{fig:radius_contour}.
@@ -204,18 +198,13 @@ In addition, we also show a contour plot of the radius of Castlia in~\cref{fig:r
     \label{fig:castalia}
 \end{figure}
 
-
-Mention that our model uses only 1024 faces for speed
-
-Show the plot of the equilibrium position as a function of the number of faces and show that it's where the knee in the curve exists
-
 \subsection{Spacecraft Equations of Motion}\label{sec:sc_eoms}
 
 The motion of a massless particle, or spacecraft, about an asteroid shares many similarities with that of the three-body problem.
 As is typical in the three-body problem, the equations of motion are usually represented in a uniformly rotating frame aligned with the two primaries.
-Similarily, the equations of motion about an asteroid are also defined in a body-fixed frame with uniform rotation.
+Similarly, the equations of motion about an asteroid are also defined in a body-fixed frame with uniform rotation.
 In this reference frame, the gravitational potential field is time invariant and only a function of the position of the particle.
-In addition, since the rotational rate of the asteroid is constant the equations of motion are time invariant.
+In addition, since the rotational rate of the asteroid is constant, the equations of motion are time invariant.
 Finally, the use of the rotating reference frame allows for much greater insight into the dynamic structure of the behavior around the asteroid.
 
 We define a reference frame originating at the center of mass of the asteroid.
@@ -224,7 +213,7 @@ The body-fixed equations of motion of a massless particle about an arbitrarily r
 \begin{align}\label{eq:body_eoms}
     \ddot{\vecbf{r}} + 2 \vecbf{\Omega} \times \dot{\vecbf{r}} + \vecbf{\Omega} \times \parenth{ \vecbf{\Omega} \times \vecbf{r} } + \dot{\vecbf{\Omega}} \times \vecbf{r} = U_{\vecbf{r}} ,
 \end{align}
-where \( \vecbf{\Omega} \) is the instaneous angular velocity vector of the asteroid represented in the body-fixed frame, \( \vecbf{r} \) is the position of the particle in the body-fixed frame, and \( U_{\vecbf{r}} \) is the gradient of the gravitational potential~\cite{scheeres2012a}.
+where \( \vecbf{\Omega} \) is the instantaneous angular velocity vector of the asteroid represented in the body-fixed frame, \( \vecbf{r} \) is the position of the particle in the body-fixed frame, and \( U_{\vecbf{r}} \) is the gradient of the gravitational potential~\cite{scheeres2012a}.
 We assume that the asteroid rotates at a uniform rate, \( \norm{\vecbf{\Omega}} = \omega \), about the axis of the maximum moment of inertia, \( \vecbf{\Omega} = \omega \hat{\vecbf{z} }\).
 As a result, we can represent the equations of motion in scalar form as
 \begin{align} \label{eq:eoms}
@@ -235,10 +224,9 @@ As a result, we can represent the equations of motion in scalar form as
     \end{split}
 \end{align}
 
-We assume that in our problem we are modelling a spacecraft rather than a massless particle.
 In this situation, the state is defined as \( \vecbf{x} = \begin{bmatrix}\vecbf{r} &\vecbf{v} \end{bmatrix}^T\) with \(\vecbf{r} = \begin{bmatrix} x & y & z \end{bmatrix}^T \in \R^{3\times1}\) and \(\vecbf{v}= \begin{bmatrix} \dot{x} & \dot{y} & \dot{z} \end{bmatrix}^T \in \R^{3\times1}\) representing the position and velocity with respect to the body-fixed frame, respectively.
 We further assume that our spacecraft is capable of exerting a translational force, \( \vecbf{u} \in \R^{3\times1} \), in any direction, while subject to a maximum magnitude constraint.
-This is typical of many spacecraft which offer full rotational freedom and can direct a maximum, and potentially varying, thrust in any direction.
+This is typical of many spacecraft which offer full rotational freedom and can direct a potentially varying thrust in any direction.
 The equations of motion may be rewritten in state space form as
 \begin{align}\label{eq:state_space_eoms}
     \begin{bmatrix} \dot{\vecbf{r}} \\ \dot{\vecbf{v}} \end{bmatrix} &=
@@ -251,7 +239,7 @@ where the terms \(\vecbf{g} \parenth{\vecbf{r}} \) and \( \vecbf{h}\parenth{\vec
 \end{align}
 
 Since Castalia is a uniformly rotating asteroid, the equations of motion are time invariant when represented in the body-fixed frame.
-In addition, there exists an integral of motion, or a conserved quantity, the is constant for all motion of a particle, absent any other perturbing forces.
+In addition, there exists an integral of motion, or a conserved quantity, that is constant for all motion of a particle.
 The Jacobi constant, \( J (\vecbf{r} , \vecbf{v} ) \), is given by
 \begin{align}\label{eq:jacobi}
     J \parenth{\vecbf{r}, \vecbf{v}} = \frac{1}{2} \omega^2 \parenth{x^2 + y^2} + U(\vecbf{r}) - \frac{1}{2} \parenth{\dot{x}^2 + \dot{y}^2 + \dot{z}^2} .
@@ -260,21 +248,21 @@ The Jacobi constant functions in a similar manner as used in three-body problem~
 We can define zero-velocity surfaces using the Jacobi constant by fixing the value to a desired constant.
 The zero-velocity surfaces are the locus of points where the kinetic energy and hence velocity vanishes.
 Just as in the three-body problem, the Jacobi constant in~\cref{eq:jacobi} divides the phase space into distinct realms of possible motion.
-Similarly, there exist in general four equilibrium points and also their associated stable and unstable manifolds~\cite{scheeres1996,scheeres1994}.
-The properties of these manifolds play a critical role in the dynamics of trajecotries in their vicinity.
+Similarly, there exist, in general, four equilibrium points and also their associated stable and unstable manifolds~\cite{scheeres1996,scheeres1994}.
+The properties of these manifolds play a critical role in the dynamics of trajectories in their vicinity.
 
 \section{Reachability Set on \Poincare Section}\label{sec:reachability}
 
 Typical optimal control methods, including both indirect and direct based methods, are highly dependent on an accurate initial guess.
-For indirect optimization, which is based on the calclus of variations, this results in the well-known two-point boundary value problem.
+For indirect optimization, which is based on the calculus of variations, this results in the well-known two-point boundary value problem.
 Insight into the problem or insight by the designer is usually required to determine appropriate initial costates that will converge to the optimal solution and satisfy the desired constraints.
-To avoid this issue, we utilize the concept of the reachiblity set on a lower dimensional \Poincare section.
+To avoid this issue, we utilize the concept of the reachability set on a lower dimensional \Poincare section.
 By repeatedly constructing the reachability set we can achieve general transfers by determining set intersections on the \Poincare section.
 This alleviates the need to determine an accurate initial guess while offering some insight into the dynamics of neighboring trajectories
 
 The reachable set contains all possible trajectories that are achievable over a fixed time horizon from a defined initial condition, subject to the constraints of the system.
 Reachability theory has been applied to collision avoidance and safety planning in aerospace systems~\cite{holzinger2009,holzinger2011b}.
-The theory supporting reachabiilty analysis is directly derivable from optimal control theory~\cite{varaiya2000,lygeros2004}.
+The theory supporting reachability analysis is directly derivable from optimal control theory~\cite{varaiya2000,lygeros2004}.
 Analytic, computation of reachability sets is only possible for a small class of potential systems.
 Here, we use numerical methods to solve an optimal control problem.
 The solution of this optimal control problem approximates a single solution that lies on the reachable set.
@@ -316,7 +304,7 @@ The solution of this optimal control problem approximates a single solution that
 
 We seek to approximate the reachability set on a \Poincare section by solving an optimal control problem.
 The \Poincare section is chosen in a manner similar to the previous work in both the three-body problem as well analysis performed around asteroids to determine periodic orbits.
-Analysis in the three-body problem relies heaviliy on symmetries in the force fields.
+Analysis in the three-body problem relies heavily on symmetries in the force fields.
 However, in our system model the gravitational potential, given by~\cref{eq:potential}, has no symmetries.
 In spite of this, it is still possible to determine periodic solutions through the application of a \Poincare map with surface of section chosen normal to surface in the phase space~\cite{scheeres2000}.
 For a periodic orbit, the trajectories will intersect the \Poincare section at two distinct points every half orbit.
@@ -374,7 +362,7 @@ We make use of the difference states \( \parenth{x_1, x_2 ,x_3, x_4 }\) which ar
 \end{align}
 The constraint \( m_1 = 0 \) ensures that the terminal states lies on the \Poincare section.
 The constraints \( m_2, m_3, m_4 \) are used to define a direction on the \Poincare section.
-We approximate the entire reachable set by discretizing the space of angles \(\phi_1, \phi_2, \phi_3 \).
+We approximate the entire reachable set by discretization  over the space of angles \(\phi_1, \phi_2, \phi_3 \).
 By convention we assume that the angles lie in the following range
 \begin{align*}
     \phi_1, \phi_2 &\in [ 0, \pi ) ,\\
@@ -387,7 +375,7 @@ Finally, we also incorporate a control thrust magnitude constraint given by
 \end{align}
 where \( u_m \) is the maximum thrust magnitude.
 This constraint assumes that the control thrust may be orientated in any direction yet the thrust is variable but limited.
-The goal is to determine the control history \( \vecbf{u}(t) \) such that teh cost function~\cref{eq:cost} is minimized while subject to the equations of motion~\cref{eq:body_eoms} and the constraints~\cref{eq:control_constraint,eq:terminal_constraints}.
+The goal is to determine the control history \( \vecbf{u}(t) \) such that the cost function~\cref{eq:cost} is minimized while subject to the equations of motion~\cref{eq:body_eoms} and the constraints~\cref{eq:control_constraint,eq:terminal_constraints}.
 
 % How do you solve the optimal control problem
 We apply a standard calculus of variations approach to solve our optimal control problem~\cite{bryson2002}.
@@ -406,11 +394,11 @@ where the Hamiltonian, \( H\), is defined as
 \end{align}
 The costate is given by \( \vecbf{\lambda} = \begin{bmatrix} \vecbf{\lambda}_r & \vecbf{\lambda}_v \end{bmatrix}^T \in \R^{6 \times 1}\), \( \vecbf{\beta} \in \R^{4 \times 1} \) are the additional Lagrange multiplers associated with the terminal constraints in~\cref{eq:terminal_constraints}, and \( \mu \) is a Lagrange multipler associated with the control constraint in~\cref{eq:control_constraint}.
 
-We can redefine the optimal control in terms of the costate by rewritting the necessary condition as
+We can redefine the optimal control in terms of the costate by rewriting the necessary condition as
 \begin{align*}
     \vecbf{u} = - \frac{u_m^2}{2 \mu} \vecbf{\lambda}_v .
 \end{align*}
-We use this along with the control constraint to solve for the Lagrange multipler \( \mu \)
+We use this along with the control constraint to solve for the Lagrange multiplier \( \mu \)
 \begin{align*}
     \mu = \pm \frac{u_m}{2} \norm{\vecbf{\lambda}_v} .
 \end{align*}
@@ -433,7 +421,7 @@ For example, the model does not include the effect of mass transfer from propell
 We instead model the control input as a generic acceleration vector in the body-fixed asteroid frame. 
 The thrust magnitude constraint in~\cref{eq:control_constraint} is chosen to emulate a physically realizable thruster system.
 In this analysis, we assume \( u_m = \SI{0.1}{\milli\meter\per\second\squared}\) which is equivalent to a thrust of approximately \SI{100}{\milli\newton} for a \SI{1000}{\kilo\gram} spacecraft.
-This amount of thrust is typical of many current ion or hall effect thrusters and is in operation in several current missions (cite Goebels Fundamentals of electric propulsion and Dawn thruster paper by choueiri2009new).
+This amount of thrust is typical of many current ion or hall effect thrusters and is in operation in several current missions~\cite{goebel2008 ,choueiri2009}.
 
 The objective is to transfer the spacecraft between two periodic equatorial orbits about Castalia.
 The initial and target orbits are periodic solutions about Castlia computed using the method introduced by Reference~\citenum{scheeres2003}.
@@ -473,7 +461,7 @@ We first compute the reachability set originating from the initial periodic orbi
 Since the target periodic orbit also lies in the equatorial plane, we augment~\cref{eq:terminal_constraints} with an additional constraint \( m_5 = z = 0\) to ensure that the trajectories remain in the equatorial plane.
 The reachability set is computed by solving the two-point boundary value problem using a multiple shooting algorithm to satisfy the necessary conditions in~\cref{eq:necc_conditions}.
 The reachability set is generated on the lower dimensional \Poincare section and is composed of the terminal states in the \( \parenth{x,z,\dot{x},\dot{z} } \) space.
-We approximate the reachability set by discritizing each of the angles \( \phi_1, \phi_2 , \phi_3 \) into ten discrete steps. 
+We approximate the reachability set by discretization of each of the angles \( \phi_1, \phi_2 , \phi_3 \) into ten discrete steps. 
 This results in a total of \(10^3\) trajectories which approximate the reachability set on the \Poincare section.
 We visualize the section using the two figures in~\cref{fig:poincare_section}.
 \begin{figure}[htbp]
@@ -481,7 +469,7 @@ We visualize the section using the two figures in~\cref{fig:poincare_section}.
     \begin{subfigure}[htbp]{0.45\textwidth} 
         \includegraphics[width=\textwidth]{figures/poincare_xvsxdot.pdf} 
         \caption{\( x \) vs. \( \dot{x} \) \Poincare section} \label{fig:poincare_xvsxdot} 
-    \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
+    \end{subfigure}~
     \begin{subfigure}[htbp]{0.45\textwidth} 
         \includegraphics[width=\textwidth]{figures/poincare_zvszdot.pdf} 
         \caption{\( z \) vs. \( \dot{z} \) \Poincare section} \label{fig:poincare_zvszdot} 
@@ -491,8 +479,8 @@ We visualize the section using the two figures in~\cref{fig:poincare_section}.
 \end{figure}
 These two-dimensional sections allow us to visualize the four-dimensional \Poincare section defined by~\cref{eq:poincare_section}.
 The first stage of the transfer is represented by the magenta markers in~\cref{fig:poincare_section}.
-From~\cref{fig:poincare_xvsxdot}, we can see that the reachablity set has grown in the \( \dot{x} \) dimension but has not been enlarged much in the \( x \) direction.
-Similarily,~\cref{fig:poincare_zvszdot} shows an increase in the \( \dot{z} \) component while still maintaining the \( z = 0 \) terminal constraint.
+From~\cref{fig:poincare_xvsxdot}, we can see that the reachability set has grown in the \( \dot{x} \) dimension but has not been enlarged much in the \( x \) direction.
+Similarly,~\cref{fig:poincare_zvszdot} shows an increase in the \( \dot{z} \) component while still maintaining the \( z = 0 \) terminal constraint.
 From the reachability set, we chose a trajectory and terminal state which minimizes a distance metric \( d(\vecbf{x}_f,\vecbf{x}_t) \) to the desired target
 \begin{align}\label{eq:reach_dist}
     d = \sqrt{k_x \parenth{x_f - x_t }^2 + k_z \parenth{z_f - z_t }^2 + k_{\dot{x}}\parenth{\dot{x}_f - \dot{x}_t }^2 + k_{\dot{z}}\parenth{\dot{z}_f - \dot{z}_t }^2} ,
@@ -504,11 +492,11 @@ where \( k_x, k_z, k_{\dot{x}}, k_{\dot{z}} \) are used to weight the relative i
     \begin{subfigure}[htbp]{0.3\textwidth} 
         \includegraphics[width=\textwidth]{figures/phi1.pdf} 
         \caption{ \( \phi_1 \)} \label{fig:phi1} 
-    \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
+    \end{subfigure}~
     \begin{subfigure}[htbp]{0.3\textwidth} 
         \includegraphics[width=\textwidth]{figures/phi2.pdf} 
         \caption{\( \phi_2 \)} \label{fig:phi2} 
-    \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
+    \end{subfigure}~
     \begin{subfigure}[htbp]{0.3\textwidth} 
         \includegraphics[width=\textwidth]{figures/phi3.pdf} 
         \caption{\( \phi_3 \)} \label{fig:phi3} 
@@ -519,7 +507,7 @@ where \( k_x, k_z, k_{\dot{x}}, k_{\dot{z}} \) are used to weight the relative i
 
 The trajectory which minimizes \( d \) is indicated by the red marker in~\cref{fig:poincare_section ,fig:phi_distance}.
 Since the reachability set does not include the target we use the minimum state from the first stage to initialize another reachability computation.
-Once again we compute the reachability set by discritizing the space on the \Poincare section using the angles \( \phi_i \).
+Once again we compute the reachability set by discretization of the angles \( \phi_i \) on the \Poincare section.
 This second stage, represented by the green markers in~\cref{fig:poincare_section,fig:phi_distance}, further increase the \( x \) component but does not reach the target orbit.
 As a result, a third stage is generated in a similar manner and shown by the green markers in~\cref{fig:poincare_section ,fig:phi_distance}.
 We can see in~\cref{fig:poincare_section} that the reachability set of the third stage includes both the \( x \) and \( z\) of the target periodic orbit.
@@ -535,22 +523,22 @@ A final optimal transfer is computed to satisfy the fixed terminal state \( \vec
     \begin{subfigure}[htbp]{0.45\textwidth} 
         \includegraphics[width=\textwidth]{figures/trajectory.pdf} 
         \caption{Equatorial view of transfer} \label{fig:trajectory_up} 
-    \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
+    \end{subfigure}~
     \begin{subfigure}[htbp]{0.45\textwidth} 
         \includegraphics[width=\textwidth]{figures/trajectory_3d.pdf} 
         \caption{Out of plane view} \label{fig:trajectory_3d} 
-    \end{subfigure}~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc. %(or a blank line to force the subfigure onto a new line) 
+    \end{subfigure}~ 
     \caption{Complete transfer trajectory}
     \label{fig:trajectory} 
 \end{figure}
-It is interesting to note the while both the initial and target periodic orbit lie in the equatorial plane, the reachablity trajectories show a relatively large out of plane component during the transfers.
+It is interesting to note the while both the initial and target periodic orbit lie in the equatorial plane, the reachability trajectories show a relatively large out of plane component during the transfers.
 In spite of this out of plane movement, the reachability set approaches and meets the target orbit. 
 \begin{figure}
     \centering
     \includegraphics[width=0.45\textwidth]{figures/control.pdf}
     \caption{Control history \label{fig:control}}
 \end{figure}
-\Cref{fig:control} shows the control input required during the manuever.
+\Cref{fig:control} shows the control input required during the maneuver.
 The transfers show a large out of plane movement for a planar transfer
 We can see that the control constraint in~\cref{eq:control_constraint} is satisfied over the entire trajectory.
 
@@ -559,9 +547,9 @@ We can see that the control constraint in~\cref{eq:control_constraint} is satisf
 In this paper, an optimal transfer process, which combines the concepts of reachability and \Poincare section, is used to generate a transfer between periodic orbits about the asteroid 4769 Castalia.
 We have linked several computations of the reachability set on a \Poincare section in order to design a transfer trajectory.
 The use of the \Poincare section allows for trajectory design on a lower dimensional space and is an extension of its well-known use in the analysis of periodic orbits.
-We use an indirect optimal control formulation to incorporate a control magnitude contraint and several terminal state constraints.
+We use an indirect optimal control formulation to incorporate a control magnitude constraint and several terminal state constraints.
 Utilizing the reachability set alleviates the need to determine accurate initial conditions that allow for convergence of the optimal solution.
-In addition, the use of the polyhedron gravitational model gives simple method of extending this work to any small body that also posseses a defined shape model.
+In addition, the use of the polyhedron gravitational model gives simple method of extending this work to any small body that also possesses a defined shape model.
 
 \bibliographystyle{aiaa}
 \bibliography{library}

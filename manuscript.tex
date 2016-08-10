@@ -25,7 +25,9 @@
 
 We present a computational approach for the design of continuous low thrust transfers around asteroids.
 These transfers are computed through the use of a reachability set generated on a lower dimensional \Poincare surface.
+Complex, long duration transfer trajectories are highly sensitive to the initial guess and generally have a small region of convergen.
 Computation of the reachable set alleviates the need to generate an accurate initial guess for optimization.
+From the reachable set, we chose a trajectory which minimizes a metric towards the desired target.
 Successive computation of the reachable set allows for the design of general transfer trajectories.
 We demonstrate this method by determining a transfer trajectory about the asteroid 4769 Castalia.
 
@@ -225,8 +227,8 @@ As a result, we can represent the equations of motion in scalar form as
 \end{align}
 
 In this situation, the state is defined as \( \vecbf{x} = \begin{bmatrix}\vecbf{r} &\vecbf{v} \end{bmatrix}^T\) with \(\vecbf{r} = \begin{bmatrix} x & y & z \end{bmatrix}^T \in \R^{3\times1}\) and \(\vecbf{v}= \begin{bmatrix} \dot{x} & \dot{y} & \dot{z} \end{bmatrix}^T \in \R^{3\times1}\) representing the position and velocity with respect to the body-fixed frame, respectively.
-We further assume that our spacecraft is capable of exerting a translational force, \( \vecbf{u} \in \R^{3\times1} \), in any direction, while subject to a maximum magnitude constraint.
-This is typical of many spacecraft which offer full rotational freedom and can direct a potentially varying thrust in any direction.
+We further assume that our spacecraft is capable of exerting a translational acceleration, \( \vecbf{u} \in \R^{3\times1} \), in any direction, while subject to a maximum magnitude constraint.
+This is typical of many spacecraft which offer full rotational freedom and can direct a potentially varying force or acceleration in any direction.
 The equations of motion may be rewritten in state space form as
 \begin{align}\label{eq:state_space_eoms}
     \begin{bmatrix} \dot{\vecbf{r}} \\ \dot{\vecbf{v}} \end{bmatrix} &=
@@ -263,9 +265,8 @@ This alleviates the need to determine an accurate initial guess while offering s
 The reachable set contains all possible trajectories that are achievable over a fixed time horizon from a defined initial condition, subject to the constraints of the system.
 Reachability theory has been applied to collision avoidance and safety planning in aerospace systems~\cite{holzinger2009,holzinger2011b}.
 The theory supporting reachability analysis is directly derivable from optimal control theory~\cite{varaiya2000,lygeros2004}.
-Analytic, computation of reachability sets is only possible for a small class of potential systems.
-Here, we use numerical methods to solve an optimal control problem.
-The solution of this optimal control problem approximates a single solution that lies on the reachable set.
+Analytic computation of reachability sets is only possible for a small class of potential systems.
+Here, we use numerical methods to solve a related optimal control problem, which approximates a single solution that lies on the reachable set.
 \begin{figure}
     \centering
     \begin{scaletikzpicturetowidth}{0.3\textwidth}
@@ -306,52 +307,47 @@ We seek to approximate the reachability set on a \Poincare section by solving an
 The \Poincare section is chosen in a manner similar to the previous work in both the three-body problem as well analysis performed around asteroids to determine periodic orbits.
 Analysis in the three-body problem relies heavily on symmetries in the force fields.
 However, in our system model the gravitational potential, given by~\cref{eq:potential}, has no symmetries.
-In spite of this, it is still possible to determine periodic solutions through the application of a \Poincare map with surface of section chosen normal to surface in the phase space~\cite{scheeres2000}.
+In spite of this, it is still possible to determine periodic solutions through the application of a \Poincare map with surface of section chosen normal to a surface in the phase space~\cite{scheeres2000}.
 For a periodic orbit, the trajectories will intersect the \Poincare section at two distinct points every half orbit.
 With the addition of a low thrust control input, we are able to expand the reachable set from a distinct point to a larger area on the \Poincare section.
 \Cref{fig:reachability_set} illustrates this methodology.
 Without any control input, the trajectories will intersect the \Poincare section at \( \vecbf{x}_n\).
 The addition of a control input allows the spacecraft to depart from the natural dynamics and intersect the section at another location.
 We use the cost function \( J \) to define a distance metric on the \Poincare section.
-Maximization of \( J \), or the minimization of \( -J \), along various directions on the \Poincare section allows us to generate the larges reachability set under the bounded control input.
+Maximization of \( J \), or the minimization of \( -J \), along various directions on the \Poincare section allows us to generate the largest reachability set under the bounded control input.
 
 We define the \Poincare section as the surface normal to \( y = 0 \).
 Following convention, the \Poincare map is defined as the map from one transversal crossing of the surface \( y = 0\) to the next.
-Using the method of Reference~\citenum{scheeres2000}, we are able to remove \( y \) and \( \dot{y} \), creating a four-dimensional map.
-The \Poincare section, \( \Sigma \) then becomes
+Using the method of Reference~\citenum{scheeres2000}, we remove \( y \) and \( \dot{y} \) from consideration and create a four-dimensional map.
+The \Poincare section, represented by \( \Sigma \), then becomes
 \begin{align}\label{eq:poincare_section}
     \Sigma = \braces{\parenth{x, \dot{x}, z, \dot{z}} | y(t_f) = 0 }.
 \end{align}
-We use this section to compute periodic orbits that serve as the initial and target of our transfer.
+We use this section to compute periodic orbits that serve as the initial and target states of our transfer.
 In addition, this section serves as a lower dimensional space upon which we approximate the reachability set.
 
 An optimal control problem is defined by the cost function
 \begin{align}\label{eq:cost}
     J = -\frac{1}{2} \left( \vecbf{x}(t_f) - \vecbf{x}_{n}(t_f)\right)^T 
-    \begin{bmatrix}
-        1 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 1 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 1 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 0 \\
-        0 & 0 & 0 & 0 & 0 & 1 \\
-    \end{bmatrix}
+    Q
     \left( \vecbf{x}(t_f) - \vecbf{x}_{n}(t_f)\right) ,
 \end{align}
 where \( \vecbf{x}_n(t_f) \) is the final state of a control-free trajectory, while the term \( \vecbf{x}(t_f)\) is the final state of a trajectory under the influence of the control input.
+We use the matrix \( Q = \text{diag} \begin{pmatrix} 1 & 0 & 1 & 1 & 0 &1 \end{pmatrix} \in \R^{6 \times 6}\) to represent the mapping onto \( \Sigma \).
 Maximization of the distance between \( \vecbf{x}_n \) and \(\vecbf{x} \), on the \Poincare section defined in~\cref{eq:poincare_section}, is equivalent to the minimization of \( J \) defined in~\cref{eq:cost}.
 We ensure that the trajectories intersect the \Poincare section through the use of terminal constraints.
 In addition, we use the terminal constraints to define a specific direction along which we seek to minimize the cost~\cref{eq:cost}.
-Since the \Poincare section is four-dimensional we parameterize a direction in \( \R^4 \)  using three angles \( \phi_1, \phi_2 , \phi_3 \) to define the terminal constraints
+Since the \Poincare section is four-dimensiona, we parameterize a direction in \( \R^4 \)  using three angles \( \phi_1, \phi_2 , \phi_3 \).
+The terminal constraints are given as
 \begin{align}\label{eq:terminal_constraints}
     \begin{split}
-        m_1 &= y = 0 \\
+        m_1 &= y = 0 , \\
         m_2 &= \parenth{\sin \phi_{1_{d}}} \parenth{ x_1^2 + x_2^2 + x_3^2 + x_4^2} - x_1^2 = 0, \\
         m_3 &= \parenth{\sin \phi_{2_{d}}} \parenth{ x_2^2 + x_3^2 + x_4^2} - x_2^2 = 0, \\
-        m_4 &= \parenth{\sin \phi_{3_{d}}} \parenth{ 2 x_3^2 + 2 x_3 \sqrt{x_4^2 + 2 x_4^2}} - x_3 - \sqrt{x_4^2 + x_3^2} = 0. 
+        m_4 &= \parenth{\sin \phi_{3_{d}}} \parenth{ 2 x_3^2 + 2 x_3 \sqrt{x_4^2 + 2 x_4^2}} - x_3 - \sqrt{x_4^2 + x_3^2} = 0 ,
     \end{split}
 \end{align}
-We make use of the difference states \( \parenth{x_1, x_2 ,x_3, x_4 }\) which are defined as
+where we make use of the difference states \( \parenth{x_1, x_2 ,x_3, x_4 }\) defined as
 \begin{align}\label{eq:diff_states}
     \begin{split}
         x_1 &= x(t_f) - x_n(t_f) , \\
@@ -362,6 +358,7 @@ We make use of the difference states \( \parenth{x_1, x_2 ,x_3, x_4 }\) which ar
 \end{align}
 The constraint \( m_1 = 0 \) ensures that the terminal states lies on the \Poincare section.
 The constraints \( m_2, m_3, m_4 \) are used to define a direction on the \Poincare section.
+\Cref{eq:diff_states} represents the difference between our controlled and uncontrolled trajectory on the \Poincare section.
 We approximate the entire reachable set by discretization  over the space of angles \(\phi_1, \phi_2, \phi_3 \).
 By convention we assume that the angles lie in the following range
 \begin{align*}
@@ -369,12 +366,12 @@ By convention we assume that the angles lie in the following range
     \phi_3 &\in [ 0 , 2 \pi ) ,
 \end{align*}
 such that we parameterize all directions on the three sphere, \(\S^3\).
-Finally, we also incorporate a control thrust magnitude constraint given by
+Finally, we also incorporate a control acceleration magnitude constraint given by
 \begin{align}\label{eq:control_constraint}
     c(\vecbf{u}) = \vecbf{u}^T \vecbf{u} - u_m^2 \leq 0 ,
 \end{align}
-where \( u_m \) is the maximum thrust magnitude.
-This constraint assumes that the control thrust may be orientated in any direction yet the thrust is variable but limited.
+where \( u_m \) is the maximum acceleration possible by the propulsion system.
+This constraint assumes that the control acceleration may be orientated in any direction yet the acceleration magnitude is variable but bounded.
 The goal is to determine the control history \( \vecbf{u}(t) \) such that the cost function~\cref{eq:cost} is minimized while subject to the equations of motion~\cref{eq:body_eoms} and the constraints~\cref{eq:control_constraint,eq:terminal_constraints}.
 
 % How do you solve the optimal control problem
@@ -410,8 +407,14 @@ Finally, we use the second-order necessary condition to determine the correct si
 This optimal control formulation results in a two point boundary value problem.
 We use a shooting method to determine the initial costates, \( \vecbf{\lambda}(t_0)\), such that the terminal constraints are satisfied.
 In addition, we implement a multiple shooting method which sub-divides the the entire trajectory into small sub-intervals~\cite{stoer2013}.
-We incorporate additional interior constraints to ensure a continuous trajectory at the patch points between the sub-intervals.
-The multiple shooting method reduces the sensitivity of the terminal states to the initial conditions and alleviates many of the issues of single shooting approaches.
+The multiple shooting method reduces the sensitivity of the terminal states to the initial conditions.
+Using a shorter time interval alleviates many of the issues of single shooting approaches, which suffer from convergence difficulties near the optimal solution.
+To ensure a continuous trajectory we incorporate additional constraints
+\begin{align}\label{sec:interior_constraints}
+    \vecbf{x}_{m-1}^{-} &= \vecbf{x}_m^{+} , \\
+    \vecbf{\lambda}_{m-1}^{-} &= \vecbf{\lambda}_m^{+},
+\end{align}
+which ensure that both the state and costate are continuous at the patch point between segment \( m-1 \) and \( m\).
 
 \section{Numerical Simulation}\label{sec:simulation}
 
@@ -419,9 +422,9 @@ We present an example transfer of a spacecraft about the asteroid 4769 Castalia.
 Our equations of motion, given by~\cref{eq:eoms}, are an idealized version of the dynamics of a spacecraft.
 For example, the model does not include the effect of mass transfer from propellant usage. 
 We instead model the control input as a generic acceleration vector in the body-fixed asteroid frame. 
-The thrust magnitude constraint in~\cref{eq:control_constraint} is chosen to emulate a physically realizable thruster system.
+The acceleration magnitude constraint in~\cref{eq:control_constraint} is chosen to emulate a physically realizable thruster system.
 In this analysis, we assume \( u_m = \SI{0.1}{\milli\meter\per\second\squared}\) which is equivalent to a thrust of approximately \SI{100}{\milli\newton} for a \SI{1000}{\kilo\gram} spacecraft.
-This amount of thrust is typical of many current ion or hall effect thrusters and is in operation in several current missions~\cite{goebel2008 ,choueiri2009}.
+This amount of thrust is typical of many current ion or hall effect thrusters~\cite{goebel2008 ,choueiri2009}.
 
 The objective is to transfer the spacecraft between two periodic equatorial orbits about Castalia.
 The initial and target orbits are periodic solutions about Castlia computed using the method introduced by Reference~\citenum{scheeres2003}.
@@ -455,10 +458,11 @@ This type of scenario would occur frequently during mapping and observation miss
 \end{figure}
 In this transfer example we also have used a reduced model of Castalia.
 Rather than using the full \num{4092} face model we reduce the number of faces to \num{1024}. 
-This greatly speeds up the computation with only a small difference in the potential field or shape model.
+This greatly speeds up the computation with only a small difference in the gravitational field.
 
-We first compute the reachability set originating from the initial periodic orbit at \( \vecbf{x}_i\) for a fixed time of flight and bounded control magnitude as defined preivously.
+We first compute the reachability set originating from the initial periodic orbit at \( \vecbf{x}_i\) for a fixed time of flight and bounded control magnitude as defined previously.
 Since the target periodic orbit also lies in the equatorial plane, we augment~\cref{eq:terminal_constraints} with an additional constraint \( m_5 = z = 0\) to ensure that the trajectories remain in the equatorial plane.
+Similarly, we also add another Lagrange multipler, \( \beta \in \R^{5 \times 1}\), to account for this addiitonal terminal constraint.
 The reachability set is computed by solving the two-point boundary value problem using a multiple shooting algorithm to satisfy the necessary conditions in~\cref{eq:necc_conditions}.
 The reachability set is generated on the lower dimensional \Poincare section and is composed of the terminal states in the \( \parenth{x,z,\dot{x},\dot{z} } \) space.
 We approximate the reachability set by discretization of each of the angles \( \phi_1, \phi_2 , \phi_3 \) into ten discrete steps. 
@@ -474,8 +478,7 @@ We visualize the section using the two figures in~\cref{fig:poincare_section}.
         \includegraphics[width=\textwidth]{figures/poincare_zvszdot.pdf} 
         \caption{\( z \) vs. \( \dot{z} \) \Poincare section} \label{fig:poincare_zvszdot} 
     \end{subfigure}
-    \caption{\Poincare section visualization}
-    \label{fig:poincare_section} 
+    \caption{\Poincare section visualization \label{fig:poincare_section}}
 \end{figure}
 These two-dimensional sections allow us to visualize the four-dimensional \Poincare section defined by~\cref{eq:poincare_section}.
 The first stage of the transfer is represented by the magenta markers in~\cref{fig:poincare_section}.
@@ -505,12 +508,12 @@ where \( k_x, k_z, k_{\dot{x}}, k_{\dot{z}} \) are used to weight the relative i
     \label{fig:phi_distance} 
 \end{figure}
 
-The trajectory which minimizes \( d \) is indicated by the red marker in~\cref{fig:poincare_section ,fig:phi_distance}.
+The trajectory which minimizes \( d \) is indicated by the red marker in~\cref{fig:poincare_section,fig:phi_distance}.
 Since the reachability set does not include the target we use the minimum state from the first stage to initialize another reachability computation.
 Once again we compute the reachability set by discretization of the angles \( \phi_i \) on the \Poincare section.
-This second stage, represented by the green markers in~\cref{fig:poincare_section,fig:phi_distance}, further increase the \( x \) component but does not reach the target orbit.
-As a result, a third stage is generated in a similar manner and shown by the green markers in~\cref{fig:poincare_section ,fig:phi_distance}.
-We can see in~\cref{fig:poincare_section} that the reachability set of the third stage includes both the \( x \) and \( z\) of the target periodic orbit.
+This second stage, represented by the blue markers in~\cref{fig:poincare_section,fig:phi_distance}, further increase the \( x \) component but does not reach the target orbit.
+As a result, a third stage is generated in a similar manner and shown by the green markers in~\cref{fig:poincare_section,fig:phi_distance}.
+We can see in~\cref{fig:poincare_section} that the reachability set of the third stage includes both the \( x \) and \( z\) components of the target periodic orbit.
 At the same time there is a relatively large difference between the \( \dot{x} \) and \( \dot{z} \) components of the third stage and the target orbit.
 In practice this is not a large concern as we have direct control over the spacecraft velocity via the control input.
 

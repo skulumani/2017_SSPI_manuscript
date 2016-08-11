@@ -7,7 +7,7 @@
  \author{
   Shankar Kulumani\thanksibid{1}%
     \thanks{Doctoral Student, \href{mailto:skulumani@gwu.edu}{skulumani@gwu.edu}. Student AIAA Member.}
-  \ and Taeyoung Lee\thanksibid{2}\thanks{Associate Professor, \href{mailto:tylee@gwu.edu}{tylee@gwu.edu}. AIAA Member}\\
+  \ and Taeyoung Lee\thanksibid{2}\thanks{Associate Professor, \href{mailto:tylee@gwu.edu}{tylee@gwu.edu}. AIAA Member.}\\
   {\normalsize\itshape
    George Washington University, Washington, District of Columbia }\\
    }
@@ -37,22 +37,22 @@ We demonstrate this method by determining a transfer trajectory about the astero
 \section{Introduction}\label{sec:introduction}
 
 % Motivation for missions/studying asteroids
-Small solar system bodies, such as asteroids and comets, are of significant interest to the scientific community.
-These small bodies offer great insight into the early formation of the solar system.
+Small solar system bodies, such as asteroids and comets, are of significant interest to the scientific community; these small bodies offer great insight into the early formation of the solar system.
 This insight offers additional detail into the formation of the Earth and also the probable formation of other planetary bodies.
 Of particular interest are those near-Earth asteroids (NEA) which inhabit heliocentric orbits in vicinity of the Earth.
-These easily accessible bodies provide attractive targets to support space industrialization, mining operations, and scientific missions..
-NEAs potentially contain many materials useful for propulsion, construction, semiconductors, precious and strategic metals~\cite{ross2001}.
-In addition, these NEAs are also of concern for their potential to impact the Earth~\cite{wie2008}.
-Asteroids and comets are the greatest threat to future civilizations and as a result there is a focused effort to mitigate these risks.
+These easily accessible bodies provide attractive targets to support space industrialization, mining operations, and scientific missions.
+NEAs potentially contain many materials such as those useful for propulsion, construction, or for use in semiconductors.
+Also, many bodies contain highly profitable materials, such as precious or strategic metals~\cite{ross2001}.
+In addition, these NEAs are also of concern for their potential to impact the Earth.
+Asteroids and comets are the greatest threat to future civilizations and as a result there is a focused effort to mitigate these risks~\cite{wie2008}.
 In spite of the great interest in asteroids, the operation of spacecraft in their vicinity is a challenging problem.
 
 % Difficulty in system model
 While there has been significant study of interplanetary transfer trajectories, relatively less analysis has been conducted on operations in the vicinity of asteroids.
 The dynamic environment around asteroids is strongly perturbed and challenging for analysis and mission operation.
-Due to their small size, resulting in a low gravitational attraction, asteroids have irregular shapes or potentially chaotic spin states.
-Furthermore, due to their low mass other non-gravitational effects, such as solar radiation pressure or third-body effects, become much more significant.
-As a result, the orbital environment is in general quite complex and it is difficult to generate analytical insights.
+Due to their low mass, which results in a low gravitational attraction, asteroids may have irregular shapes and potentially chaotic spin states.
+Furthermore, since the magnitude of the gravitational attraction is relatively small non-gravitational effects, such as solar radiation pressure or third-body effects, become much more significant.
+As a result, the orbital environment is generally quite complex and it is difficult to generate analytical insights.
 
 % Must estimate gravity and shape from ground based optical measurements
 % most use a spherical harmonic model or a ellipsoid model but we use a polyhedron model
@@ -69,8 +69,7 @@ Instead, we model the asteroid as a constant-density polyhedron and avoid the is
 
 % use of low thrust propulsion
 The application of optimal control methods for orbital trajectory design is nontrivial.
-In order to implement any optimization method a sufficiently accurate ``initial guess'' is required.
-Frequently, insight into the problem or intuition on the part of the designer is often required to determine initial conditions that will converge to the optimal solution.
+Frequently, insight into the problem or intuition on the part of the designer is required to determine initial conditions that will converge to the optimal solution.
 However, the asteroid system dynamics are nonlinear and exhibit chaotic behaviors.
 This makes solving the optimization problem highly dependent on the initial condition.
 Similar to the three-body problem, there is an insufficient number of analytical constants to derive an analytical solution in general.
@@ -80,14 +79,14 @@ These methods are critically dependent on accurate initial guess in order to all
 % similarity to the three body problem
 The irregular shape of asteroids leads to a richer dynamics as compared to the familiar Kepler's problem.
 The motion of particles around asteroids is modeled using the restricted full two-body problem.
-This model has many similarities with the restricted three body problem, and much of the theory developed in the three-body problem is also applicable.
+This model has many similarities with the restricted three body problem, and much of the theory developed for the three-body problem is also applicable.
 The similarity of the three-body problem to motion around asteroids allows for much of the same theory to be applied to the asteroid problem~\cite{mondelo2010,herrera2014}.
 In this paper, we extend the design method developed in the three-body problem to motion about asteroids~\cite{kulumani2015}.
 Our approach avoids the difficulties in selecting an appropriate initial guess for optimization.
-Instead, we utilize the concept of the reachability set to enable a simple methodology of selecting initial conditions to achieve general orbital transfers.
+We instead utilize the concept of the reachability set to enable a simple methodology of selecting initial conditions to achieve general orbital transfers.
 Given an initial condition and fixed time horizon, the reachable set is the set of states attainable, subject to the operational constraints of the spacecraft.
-We calculate the reachable set on a lower dimensional \Poincare section which allows a 
-In addition, the generation of the reachable set allows for a more systematic method of determining initial conditions and eases the burden on the designer.
+We calculate the reachable set on a lower dimensional \Poincare section. 
+The generation of the reachable set allows for a more systematic method of determining initial conditions and eases the burden on the designer.
 This simple methodology allows for extended transfer trajectories which iteratively approach a desired target orbit.
 
 \section{Asteroid Model}\label{sec:asteroid_model}
@@ -96,9 +95,9 @@ In this analysis we consider transfers about the asteroid 4769 Castalia.
 Castalia has an accurate shape model and is also considered a potentially hazardous asteroid with a possibility of Earth impact~\cite{hudson1994}.
 We model the gravitational potential field of Castalia using a polyhedron gravity model instead of using a spherical harmonic expansion.
 The spherical harmonic expansion is a popular method of representing the gravity field~\cite{scheeres1996}.
-Approximations are possible by truncating the infinite order series to fixed set of coefficients, with the most important terms corresponding to the second order and degree~\cite{scheeres1994}.
-The approximation error is generally small given a sufficient amount of terms. 
+Approximations are possible by truncating the infinite order series to fixed set of coefficients, with the most important terms corresponding to the second order and degree~\cite{scheeres1994}. 
 However, when evaluated close to the body the series expansion will diverge and is no longer accurate. 
+Therefore, the spherical harmonic representation is not ideal for landing trajectories or those passing close to the surface.
 
 In contrast, the polyhedron model results in an exact closed form expression of the gravitational potential field~\cite{werner1994}.
 In addition, the model results in the exact potential for the given shape
@@ -109,7 +108,7 @@ Finally, the polyhedron method is well suited to trajectories passing close to t
 
 % benefits of the polyhedron model
 A polyhedral model of the surface of an asteroid can be determined from remote optical or radar sensors.
-The faces of the polyhedron can be large or small and allows for fine detail such as depression, craters, ridges, or interior voids.
+The faces of the polyhedron can be large or small and allow for fine detail such as depression, craters, ridges, or interior voids.
 In addition, there is no requirement for the body to be modeled at a uniformly high resolution so small details can be incorporated with minimal cost.
 From the shape model, an analytical, closed form expression for the gravitational potential can be derived.
 The polyhedral approach provides an accurate gravitational model consistent with the resolution of the shape and the chosen discretization.
@@ -119,12 +118,12 @@ Therefore, this model is ideal for missions traversing large regions both close 
 \subsection{Polyhedron Gravity Model}\label{sec:polyhedron_model}
 
 We represent the gravitational potential of the asteroid using a polyhedron gravitation model.
-This model is composed of a polyhedron, a three-dimensional solid body, which is defined by a series of vectors in the body-fixed frame.
+This model is composed of a polyhedron, a three-dimensional solid body, that is defined by a series of vectors in the body-fixed frame.
 The vectors define vertices in the body-fixed frame as well as planar faces which compose the surface of the asteroid.
 We assume that each face is a triangle composed of three vertices and three edges.
 As a result, only two faces meet at each edge while three faces meet at each vertex.
 Only the body-fixed vectors, and their associated topology, is required to define the exterior gravitational model.
-References~\citenum{werner1994} and~\citenum{werner1997} give a detailed derivation of the polyhedron model.
+References~\citenum{werner1994} and~\citenum{werner1996} give a detailed derivation of the polyhedron model.
 Here, we summarize the key developments and equations required for implementation.
 
 Consider three vectors \( \vecbf{v}_1, \vecbf{v}_2, \vecbf{v}_3 \), assumed to be ordered in a counterclockwise direction, which define a face.
@@ -177,7 +176,7 @@ Furthermore we can use these definitions to define the attraction, gravity gradi
 
 One interesting thing to note is that both~\cref{eq:face_dyad,eq:edge_dyad} can be precomputed without knowledge of the position of the satellite.
 They are both solely functions of the vertices and edges of the polyhedral shape model and are computed once and stored.
-Once a position vector \( \vecbf{r} \) is defined then the scalars given in~\cref{eq:edge_factor,eq:face_factor} can be computed for each face and edge.
+Once a position vector \( \vecbf{r} \) is defined, the scalars given in~\cref{eq:edge_factor,eq:face_factor} can be computed for each face and edge.
 Finally,~\cref{eq:potential} is used to compute the gravitational potential on the spacecraft.
 The Laplacian, defined in~\cref{eq:laplacian}, gives a simple method to determine if the spacecraft has collided with the body~\cite{werner1996} 
 
@@ -185,7 +184,7 @@ In this work, we consider trajectories about asteroid 4769 Castalia.
 Doppler radar images, obtained at the Arecibo Observatory in 1989, are used to determine a shape model of Castalia~\cite{hudson1994,neese2004}.
 We use the estimated rotation period of \SI{4.07}{\hour} with a nominal density of \SI{2.1}{\gram\per\centi\meter\cubed}~\cite{scheeres1996}.
 The shape model is composed of \num{4092} triangular faces and a rendering of the asteroid is provided in~\cref{fig:castalia_3d}.
-In addition, we also show a contour plot of the radius of Castlia in~\cref{fig:radius_contour}.
+In addition, we show a contour plot of the radius of Castlia in~\cref{fig:radius_contour}.
 \begin{figure}
     \centering
     \begin{subfigure}[htbp]{0.45\textwidth}
@@ -259,7 +258,7 @@ Typical optimal control methods, including both indirect and direct based method
 For indirect optimization, which is based on the calculus of variations, this results in the well-known two-point boundary value problem.
 Insight into the problem or insight by the designer is usually required to determine appropriate initial costates that will converge to the optimal solution and satisfy the desired constraints.
 To avoid this issue, we utilize the concept of the reachability set on a lower dimensional \Poincare section.
-By repeatedly constructing the reachability set we can achieve general transfers by determining set intersections on the \Poincare section.
+By repeatedly constructing the reachability set, we can achieve general transfers by determining set intersections on the \Poincare section.
 This alleviates the need to determine an accurate initial guess while offering some insight into the dynamics of neighboring trajectories
 
 The reachable set contains all possible trajectories that are achievable over a fixed time horizon from a defined initial condition, subject to the constraints of the system.
@@ -305,9 +304,9 @@ Here, we use numerical methods to solve a related optimal control problem, which
 
 We seek to approximate the reachability set on a \Poincare section by solving an optimal control problem.
 The \Poincare section is chosen in a manner similar to the previous work in both the three-body problem as well analysis performed around asteroids to determine periodic orbits.
-Analysis in the three-body problem relies heavily on symmetries in the force fields.
-However, in our system model the gravitational potential, given by~\cref{eq:potential}, has no symmetries.
-In spite of this, it is still possible to determine periodic solutions through the application of a \Poincare map with surface of section chosen normal to a surface in the phase space~\cite{scheeres2000}.
+Typically, analysis for the three-body problem relies heavily on symmetries in the force fields.
+However, in our system model, the gravitational potential, given by~\cref{eq:potential}, has no symmetries.
+In spite of this, it is still possible to determine periodic solutions through the application of a \Poincare map with the surface of section chosen normal to a surface in the phase space~\cite{scheeres2000}.
 For a periodic orbit, the trajectories will intersect the \Poincare section at two distinct points every half orbit.
 With the addition of a low thrust control input, we are able to expand the reachable set from a distinct point to a larger area on the \Poincare section.
 \Cref{fig:reachability_set} illustrates this methodology.
@@ -356,7 +355,7 @@ where we make use of the difference states \( \parenth{x_1, x_2 ,x_3, x_4 }\) de
         x_4 &= \dot{z}(t_f) - \dot{z}_n(t_f) . \\
     \end{split}
 \end{align}
-The constraint \( m_1 = 0 \) ensures that the terminal states lies on the \Poincare section.
+The constraint \( m_1 = 0 \) ensures that the terminal state lies on the \Poincare section.
 The constraints \( m_2, m_3, m_4 \) are used to define a direction on the \Poincare section.
 \Cref{eq:diff_states} represents the difference between our controlled and uncontrolled trajectory on the \Poincare section.
 We approximate the entire reachable set by discretization  over the space of angles \(\phi_1, \phi_2, \phi_3 \).
@@ -375,7 +374,7 @@ This constraint assumes that the control acceleration may be orientated in any d
 The goal is to determine the control history \( \vecbf{u}(t) \) such that the cost function~\cref{eq:cost} is minimized while subject to the equations of motion~\cref{eq:body_eoms} and the constraints~\cref{eq:control_constraint,eq:terminal_constraints}.
 
 % How do you solve the optimal control problem
-We apply a standard calculus of variations approach to solve our optimal control problem~\cite{bryson2002}.
+We apply a standard calculus of variations approach to solve our optimal control problem~\cite{bryson1975}.
 Using the Euler-Lagrange equations we arrive at the necessary conditions for optimality
 \begin{align}\label{eq:necc_conditions}
     \begin{split}
@@ -534,7 +533,7 @@ A final optimal transfer is computed to satisfy the fixed terminal state \( \vec
     \caption{Complete transfer trajectory}
     \label{fig:trajectory} 
 \end{figure}
-It is interesting to note the while both the initial and target periodic orbit lie in the equatorial plane, the reachability trajectories show a relatively large out of plane component during the transfers.
+It is interesting to note that while both the initial and target periodic orbit lie in the equatorial plane, the reachability trajectories show a relatively large out of plane component during the transfers.
 In spite of this out of plane movement, the reachability set approaches and meets the target orbit. 
 \begin{figure}
     \centering

@@ -25,10 +25,10 @@
 
 We present a computational approach for the design of continuous low thrust transfers around asteroids.
 These transfers are computed through the use of a reachability set generated on a lower dimensional \Poincare surface.
-Complex, long duration transfer trajectories are highly sensitive to the initial guess and generally have a small region of convergen.
+Complex, long duration transfer trajectories are highly sensitive to the initial guess and generally have a small region of convergence.
 Computation of the reachable set alleviates the need to generate an accurate initial guess for optimization.
-From the reachable set, we chose a trajectory which minimizes a metric towards the desired target.
-Successive computation of the reachable set allows for the design of general transfer trajectories.
+From the reachable set, we chose a trajectory which minimizes a distance metric towards the desired target.
+Successive computation of the reachable set allows for the design of general transfer trajectories which iteratively approach the target.
 We demonstrate this method by determining a transfer trajectory about the asteroid 4769 Castalia.
 
 \end{abstract}
@@ -51,7 +51,7 @@ In spite of the great interest in asteroids, the operation of spacecraft in thei
 While there has been significant study of interplanetary transfer trajectories, relatively less analysis has been conducted on operations in the vicinity of asteroids.
 The dynamic environment around asteroids is strongly perturbed and challenging for analysis and mission operation.
 Due to their low mass, which results in a low gravitational attraction, asteroids may have irregular shapes and potentially chaotic spin states.
-Furthermore, since the magnitude of the gravitational attraction is relatively small non-gravitational effects, such as solar radiation pressure or third-body effects, become much more significant.
+Furthermore, since the magnitude of the gravitational attraction is relatively small, non-gravitational effects, such as solar radiation pressure or third-body effects, become much more significant.
 As a result, the orbital environment is generally quite complex and it is difficult to generate analytical insights.
 
 % Must estimate gravity and shape from ground based optical measurements
@@ -65,7 +65,7 @@ However, the harmonic expansion is always an approximation as a result of the in
 Additionally, the harmonic model used outside of the circumscribing sphere is not guaranteed to converge inside the sphere.
 As a result, additional steps must be taken to determine a valid harmonic expansion for particles close to the body.
 This results in a cumbersome gravity field model that requires additional constraints to ensure continuity and validity at the radius of the circumscribing sphere~\cite{werner1994 ,werner1996}.
-Instead, we model the asteroid as a constant-density polyhedron and avoid the issues of the harmonic expansion while enabling several other useful advantages.
+Instead, we model the asteroid as a constant-density polyhedron and avoid the issues of the harmonic expansion.
 
 % use of low thrust propulsion
 The application of optimal control methods for orbital trajectory design is nontrivial.
@@ -79,8 +79,7 @@ These methods are critically dependent on accurate initial guess in order to all
 % similarity to the three body problem
 The irregular shape of asteroids leads to a richer dynamics as compared to the familiar Kepler's problem.
 The motion of particles around asteroids is modeled using the restricted full two-body problem.
-This model has many similarities with the restricted three body problem, and much of the theory developed for the three-body problem is also applicable.
-The similarity of the three-body problem to motion around asteroids allows for much of the same theory to be applied to the asteroid problem~\cite{mondelo2010,herrera2014}.
+This model has many similarities with the restricted three body problem, and much of the theory developed for the three-body problem is also applicable~\cite{mondelo2010,herrera2014}.
 In this paper, we extend the design method developed in the three-body problem to motion about asteroids~\cite{kulumani2015}.
 Our approach avoids the difficulties in selecting an appropriate initial guess for optimization.
 We instead utilize the concept of the reachability set to enable a simple methodology of selecting initial conditions to achieve general orbital transfers.
@@ -146,14 +145,14 @@ For each face we define the face dyad \( \vecbf{F}_f \) as
     \vecbf{F}_f &= \hat{\vecbf{n}}_f \hat{\vecbf{n}}_f .
 \end{align}
 Each edge is a member of two faces and has an outward pointing edge normal vector, given in~\cref{eq:edge_normal}, perpendicular to both the edge and the face normal.
-For the edge connecting the vectors \( \vecbf{v}_1 \) and \( \vecbf{v}_2 \) which are shared between the faces \(A\) and \( B\), the per edge dyad is given by
+For the edge connecting the vectors \( \vecbf{v}_1 \) and \( \vecbf{v}_2 \), which are shared between the faces \(A\) and \( B\), the per edge dyad is given by
 \begin{align}\label{eq:edge_dyad}
     \vecbf{E}_{12} = \hat{\vecbf{n}}_A \hat{\vecbf{n}}_{12}^A + \hat{\vecbf{n}}_B \hat{\vecbf{n}}_{21}^B .
 \end{align}
-The edge dyad, \( \vecbf{E}_e \), is defined for each edge and a function of the two adjacent faces meeting at the edge.
-The face dyad, \( \vecbf{F}_f \), is defined for each face and is a function of the face normal vector.
+The edge dyad, \( \vecbf{E}_e \), is defined for each edge and is a function of the two adjacent faces meeting at the edge.
+The face dyad, \( \vecbf{F}_f \), is defined for each face and is a function of the face normal vectors.
 
-Let \( \vecbf{r}_i \) be the vector from the spacecraft to the vertex \( \vecbf{v}_i \) and it's length is \( r_i = \norm{\vecbf{r}_i} \).
+Let \( \vecbf{r}_i \) be the vector from the spacecraft to the vertex \( \vecbf{v}_i \) and it's length is given by \( r_i = \norm{\vecbf{r}_i} \).
 The per-edge factor \( L_e \), for the edge connecting vertices \( \vecbf{v}_i \) and \( \vecbf{v}_j \), with a constant length \( e_{ij} \) is
 \begin{align}\label{eq:edge_factor}
     L_e &= \ln \frac{r_i + r_j + e_{ij}}{r_i + r_j - e_{ij}}.
@@ -164,10 +163,10 @@ For the face defined by the vertices \( \vecbf{v}_i, \vecbf{v}_j, \vecbf{v}_k \)
 \end{align}
 The gravitational potential due to a constant density polyhedron is given as
 \begin{align}\label{eq:potential}
-    U(\vecbf{r}) &= 1\frac{1}{2} G \sigma \sum_{e \in \text{edges}} \vecbf{r}_e \cdot \vecbf{E}_e \cdot \vecbf{r}_e \cdot L_e - \frac{1}{2}G \sigma \sum_{f \in \text{faces}} \vecbf{r}_f \cdot \vecbf{F}_f \cdot \vecbf{r}_f \cdot \omega_f
+    U(\vecbf{r}) &= 1\frac{1}{2} G \sigma \sum_{e \in \text{edges}} \vecbf{r}_e \cdot \vecbf{E}_e \cdot \vecbf{r}_e \cdot L_e - \frac{1}{2}G \sigma \sum_{f \in \text{faces}} \vecbf{r}_f \cdot \vecbf{F}_f \cdot \vecbf{r}_f \cdot \omega_f ,
 \end{align}
-where \( \vecbf{r}_e, \vecbf{r}_f \) is the vector from the spacecraft to any point on the respective edge or face, \( G\) is the universal gravitational constant, and \( \sigma \) is the constant density of the asteroid.
-Furthermore we can use these definitions to define the attraction, gravity gradient matrix, and Laplacian are defined as
+where \( \vecbf{r}_e\) and \(\vecbf{r}_f \) are the vectors from the spacecraft to any point on the respective edge or face, \( G\) is the universal gravitational constant, and \( \sigma \) is the constant density of the asteroid.
+Furthermore we can use these definitions to define the attraction, gravity gradient matrix, and Laplacian as
 \begin{align}
     \nabla U ( \vecbf{r} ) &= -G \sigma \sum_{e \in \text{edges}} \vecbf{E}_e \cdot \vecbf{r}_e \cdot L_e + G \sigma \sum_{f \in \text{faces}} \vecbf{F}_f \cdot \vecbf{r}_f \cdot \omega_f , \label{eq:attraction}\\
     \nabla \nabla U ( \vecbf{r} ) &= G \sigma \sum_{e \in \text{edges}} \vecbf{E}_e  \cdot L_e - G \sigma \sum_{f \in \text{faces}} \vecbf{F}_f \cdot \omega_f , \label{eq:gradient_matrix}\\
@@ -270,13 +269,13 @@ Here, we use numerical methods to solve a related optimal control problem, which
     \centering
     \begin{scaletikzpicturetowidth}{0.3\textwidth}
     \begin{tikzpicture}[scale=\tikzscale]
-        \coordinate [label=left:\textcolor{black}{\large \(\vec{x}_0\)}] (x0) at (-1,-2);
-        \coordinate [label=below:\textcolor{black}{\large  \(\vec{x}_n\)}] (xn) at (1,1);
+        \coordinate [label=left:\textcolor{black}{\large \(\vecbf{x}_0\)}] (x0) at (-1,-2);
+        \coordinate [label=below:\textcolor{black}{\large  \(\vecbf{x}_n\)}] (xn) at (1,1);
         \coordinate [label=left:\textcolor{black}{\large  \(\Sigma\)}] (sigma) at (-4,3);
         %\coordinate [label=below:\textcolor{black}{\large  \(P(\vec{x})\)}] (P) at (0,-3.5);
         % define the path of the flow with coordinates
         \coordinate [label=right:\textcolor{black}{}] (f1) at (5,-2);
-        \coordinate [label=below:\textcolor{black}{\large  \(\phi(t,\vec{x}_0)\)}] (f2) at (2,-5);
+        \coordinate [label=below:\textcolor{black}{\large  \(\psi(t,\vecbf{x}_0)\)}] (f2) at (2,-5);
         \coordinate [label=right:\textcolor{black}{}] (f3) at (-4,-4);
         \coordinate [label=right:\textcolor{black}{}] (f4) at (-4,-1);
         
@@ -294,7 +293,7 @@ Here, we use numerical methods to solve a related optimal control problem, which
         \draw [thick,->] (xn) -- ($(xn) + (2.5,0)$);
         \draw [thick,rotate=45,->] (xn) -- ($(xn) + (2.5,0)$);
         \draw ($(xn) + (1,0)$) arc [start angle=0,end angle=45, radius=1];
-        \node [draw=none] at (2.4,1.5) {\Large \(\theta_d\)};
+        \node [draw=none] at (2.4,1.5) {\Large \(\phi_d\)};
         \draw [decorate,decoration={brace,amplitude=5pt},rotate=45] (xn) -- ($(xn) + (2,0)$);
         \node [draw=none] at ($ (xn) + (0,1) $) {\Large \( J \)};
     \end{tikzpicture}
@@ -310,10 +309,10 @@ In spite of this, it is still possible to determine periodic solutions through t
 For a periodic orbit, the trajectories will intersect the \Poincare section at two distinct points every half orbit.
 With the addition of a low thrust control input, we are able to expand the reachable set from a distinct point to a larger area on the \Poincare section.
 \Cref{fig:reachability_set} illustrates this methodology.
-Without any control input, the trajectories will intersect the \Poincare section at \( \vecbf{x}_n\).
-The addition of a control input allows the spacecraft to depart from the natural dynamics and intersect the section at another location.
+Without any control input, the trajectories will follow the system dynamics, \( \psi(t, \vecbf{x}_0 ) \) and intersect the \Poincare section at \( \vecbf{x}_n\).
+The addition of a control input allows the spacecraft to depart from the natural dynamics and intersect the section at another location denoted by the dashed circle.
 We use the cost function \( J \) to define a distance metric on the \Poincare section.
-Maximization of \( J \), or the minimization of \( -J \), along various directions on the \Poincare section allows us to generate the largest reachability set under the bounded control input.
+Maximization of \( J \), or the minimization of \( -J \), along various directions, which are parameterized using \( \phi_d \), on the \Poincare section allows us to generate the largest reachability set under the bounded control input.
 
 We define the \Poincare section as the surface normal to \( y = 0 \).
 Following convention, the \Poincare map is defined as the map from one transversal crossing of the surface \( y = 0\) to the next.
@@ -332,12 +331,12 @@ An optimal control problem is defined by the cost function
     \left( \vecbf{x}(t_f) - \vecbf{x}_{n}(t_f)\right) ,
 \end{align}
 where \( \vecbf{x}_n(t_f) \) is the final state of a control-free trajectory, while the term \( \vecbf{x}(t_f)\) is the final state of a trajectory under the influence of the control input.
-We use the matrix \( Q = \text{diag} \begin{pmatrix} 1 & 0 & 1 & 1 & 0 &1 \end{pmatrix} \in \R^{6 \times 6}\) to represent the mapping onto \( \Sigma \).
+We use the matrix \( Q = \text{diag} \begin{bmatrix} 1 & 0 & 1 & 1 & 0 &1 \end{bmatrix} \in \R^{6 \times 6}\) to represent the mapping onto \( \Sigma \).
 Maximization of the distance between \( \vecbf{x}_n \) and \(\vecbf{x} \), on the \Poincare section defined in~\cref{eq:poincare_section}, is equivalent to the minimization of \( J \) defined in~\cref{eq:cost}.
 We ensure that the trajectories intersect the \Poincare section through the use of terminal constraints.
 In addition, we use the terminal constraints to define a specific direction along which we seek to minimize the cost~\cref{eq:cost}.
-Since the \Poincare section is four-dimensiona, we parameterize a direction in \( \R^4 \)  using three angles \( \phi_1, \phi_2 , \phi_3 \).
-The terminal constraints are given as
+Since the \Poincare section is four-dimensional, we parameterize a direction in \( \R^4 \)  using three angles \( \phi_1, \phi_2 , \phi_3 \).
+The terminal constraints are given in terms of these angles as
 \begin{align}\label{eq:terminal_constraints}
     \begin{split}
         m_1 &= y = 0 , \\
@@ -400,7 +399,7 @@ We use this along with the control constraint to solve for the Lagrange multipli
 \end{align*}
 Finally, we use the second-order necessary condition to determine the correct sign of \( \mu \) and find the optimal control input for the reachable set as
 \begin{align}\label{eq:optimal_control}
-    \vecbf{u} = - u_m \frac{\vecbf{\lambda}}{\norm{\vecbf{\lambda}}} .
+    \vecbf{u} = - u_m \frac{\vecbf{\lambda_{\vecbf{v}}}}{\norm{\vecbf{\lambda_{\vecbf{v}}}}} .
 \end{align}
 
 This optimal control formulation results in a two point boundary value problem.
@@ -461,7 +460,7 @@ This greatly speeds up the computation with only a small difference in the gravi
 
 We first compute the reachability set originating from the initial periodic orbit at \( \vecbf{x}_i\) for a fixed time of flight and bounded control magnitude as defined previously.
 Since the target periodic orbit also lies in the equatorial plane, we augment~\cref{eq:terminal_constraints} with an additional constraint \( m_5 = z = 0\) to ensure that the trajectories remain in the equatorial plane.
-Similarly, we also add another Lagrange multipler, \( \beta \in \R^{5 \times 1}\), to account for this addiitonal terminal constraint.
+Similarly, we also add another Lagrange multipler, \( \beta \in \R^{5 \times 1}\), to account for this additonal terminal constraint.
 The reachability set is computed by solving the two-point boundary value problem using a multiple shooting algorithm to satisfy the necessary conditions in~\cref{eq:necc_conditions}.
 The reachability set is generated on the lower dimensional \Poincare section and is composed of the terminal states in the \( \parenth{x,z,\dot{x},\dot{z} } \) space.
 We approximate the reachability set by discretization of each of the angles \( \phi_1, \phi_2 , \phi_3 \) into ten discrete steps. 
@@ -541,12 +540,11 @@ In spite of this out of plane movement, the reachability set approaches and meet
     \caption{Control history \label{fig:control}}
 \end{figure}
 \Cref{fig:control} shows the control input required during the maneuver.
-The transfers show a large out of plane movement for a planar transfer
 We can see that the control constraint in~\cref{eq:control_constraint} is satisfied over the entire trajectory.
 
 \section{Conclusions}\label{sec:conclusions}
 
-In this paper, an optimal transfer process, which combines the concepts of reachability and \Poincare section, is used to generate a transfer between periodic orbits about the asteroid 4769 Castalia.
+In this paper, an optimal transfer process, which combines the concepts of reachability sets on a \Poincare section, is used to generate a transfer between periodic orbits about the asteroid 4769 Castalia.
 We have linked several computations of the reachability set on a \Poincare section in order to design a transfer trajectory.
 The use of the \Poincare section allows for trajectory design on a lower dimensional space and is an extension of its well-known use in the analysis of periodic orbits.
 We use an indirect optimal control formulation to incorporate a control magnitude constraint and several terminal state constraints.

@@ -74,7 +74,7 @@ However, the asteroid system dynamics are nonlinear and exhibit chaotic behavior
 This makes solving the optimization problem highly dependent on the initial condition.
 Similar to the three-body problem, there is an insufficient number of analytical constants to derive an analytical solution in general.
 As a result, accurate numerical methods are required to determine optimal solutions.
-These methods are critically dependent on accurate initial guess in order to allow for convergence to an optimal solution.
+These methods are critically dependent on an accurate initial guess in order to allow for convergence to an optimal solution.
 
 % similarity to the three body problem
 The irregular shape of asteroids leads to a richer dynamics as compared to the familiar Kepler's problem.
@@ -177,7 +177,7 @@ One interesting thing to note is that both~\cref{eq:face_dyad,eq:edge_dyad} can 
 They are both solely functions of the vertices and edges of the polyhedral shape model and are computed once and stored.
 Once a position vector \( \vecbf{r} \) is defined, the scalars given in~\cref{eq:edge_factor,eq:face_factor} can be computed for each face and edge.
 Finally,~\cref{eq:potential} is used to compute the gravitational potential on the spacecraft.
-The Laplacian, defined in~\cref{eq:laplacian}, gives a simple method to determine if the spacecraft has collided with the body~\cite{werner1996} 
+The Laplacian, defined in~\cref{eq:laplacian}, gives a simple method to determine if the spacecraft has collided with the body~\cite{werner1996}. 
 
 In this work, we consider trajectories about asteroid 4769 Castalia.
 Doppler radar images, obtained at the Arecibo Observatory in 1989, are used to determine a shape model of Castalia~\cite{hudson1994,neese2004}.
@@ -435,10 +435,10 @@ The initial conditions for both orbits are defined in the body-fixed frame as
     \quad
     \vecbf{x}_t =
     \begin{bmatrix}
-        2.9786 \\ 0 \\ 0.0012 \\ 0\\ -0.0011 \\ 0
+        3.8161 \\ 0 \\ 0.0007 \\ 0\\ -0.0015 \\ 0
     \end{bmatrix} .
 \end{align}
-\Cref{fig:initial_transfer} shows the initial and desired periodic orbits which lie in the equatorial plane of Castalia.
+\Cref{fig:initial_transfer} shows the initial, \( \vecbf{x}_i \), and target, \( \vecbf{x}_t\), periodic orbits which lie in the equatorial plane of Castalia.
 Our goal is to transfer from a lower altitude to a higher altitude while remaining in the equatorial plane of the asteroid.
 This type of scenario would occur frequently during mapping and observation missions to asteroids.
 \begin{figure}[htbp]
@@ -460,7 +460,7 @@ This greatly speeds up the computation with only a small difference in the gravi
 
 We first compute the reachability set originating from the initial periodic orbit at \( \vecbf{x}_i\) for a fixed time of flight and bounded control magnitude as defined previously.
 Since the target periodic orbit also lies in the equatorial plane, we augment~\cref{eq:terminal_constraints} with an additional constraint \( m_5 = z = 0\) to ensure that the trajectories remain in the equatorial plane.
-Similarly, we also add another Lagrange multipler, \( \beta \in \R^{5 \times 1}\), to account for this additonal terminal constraint.
+Similarly, we also add another Lagrange multipler, \( \beta \in \R^{5 \times 1}\), to account for this additional terminal constraint.
 The reachability set is computed by solving the two-point boundary value problem using a multiple shooting algorithm to satisfy the necessary conditions in~\cref{eq:necc_conditions}.
 The reachability set is generated on the lower dimensional \Poincare section and is composed of the terminal states in the \( \parenth{x,z,\dot{x},\dot{z} } \) space.
 We approximate the reachability set by discretization of each of the angles \( \phi_1, \phi_2 , \phi_3 \) into ten discrete steps. 
@@ -481,7 +481,11 @@ We visualize the section using the two figures in~\cref{fig:poincare_section}.
 These two-dimensional sections allow us to visualize the four-dimensional \Poincare section defined by~\cref{eq:poincare_section}.
 The first stage of the transfer is represented by the magenta markers in~\cref{fig:poincare_section}.
 From~\cref{fig:poincare_xvsxdot}, we can see that the reachability set has grown in the \( \dot{x} \) dimension but has not been enlarged much in the \( x \) direction.
-Similarly,~\cref{fig:poincare_zvszdot} shows an increase in the \( \dot{z} \) component while still maintaining the \( z = 0 \) terminal constraint.
+Similarly,~\cref{fig:poincare_zvszdot} shows an increase in the \( \dot{z} \) component.
+There is a relatively large deviation of the \( z = 0 \) as seen by the trajectories in the second and third stages shown in~\cref{fig:poincare_zvszdot}. 
+This is primarily due to the competing constraints shown in~\cref{eq:terminal_constraints}.
+The shooting method must satisfy both a direction on the \Poincare section as well as the terminal constraint of \( z = 0\).
+For certain trajectories, this is more restrictive and results in a slightly larger terminal constraint violation.
 From the reachability set, we chose a trajectory and terminal state which minimizes a distance metric \( d(\vecbf{x}_f,\vecbf{x}_t) \) to the desired target
 \begin{align}\label{eq:reach_dist}
     d = \sqrt{k_x \parenth{x_f - x_t }^2 + k_z \parenth{z_f - z_t }^2 + k_{\dot{x}}\parenth{\dot{x}_f - \dot{x}_t }^2 + k_{\dot{z}}\parenth{\dot{z}_f - \dot{z}_t }^2} ,

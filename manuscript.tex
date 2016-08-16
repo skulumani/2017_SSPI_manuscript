@@ -2,12 +2,12 @@
 
 \usepackage{aiaa_packages}
 
- \title{Low-Thrust Trajectory Design Near Asteroids Using Reachability Sets}
+ \title{Low-Thrust Trajectory Design Using Reachability Sets near Asteroid 4769 Castalia}
 
  \author{
   Shankar Kulumani\thanksibid{1}%
     \thanks{Doctoral Student, \href{mailto:skulumani@gwu.edu}{skulumani@gwu.edu}. Student AIAA Member.}
-  \ and Taeyoung Lee\thanksibid{2}\thanks{Associate Professor, \href{mailto:tylee@gwu.edu}{tylee@gwu.edu}. AIAA Member.}\\
+  \ and Taeyoung Lee\thanksibid{2}\thanks{Associate Professor, \href{mailto:tylee@gwu.edu}{tylee@gwu.edu}.}\\
   {\normalsize\itshape
    George Washington University, Washington, District of Columbia }\\
    }
@@ -54,18 +54,32 @@ Due to their low mass, which results in a low gravitational attraction, asteroid
 Furthermore, since the magnitude of the gravitational attraction is relatively small, non-gravitational effects, such as solar radiation pressure or third-body effects, become much more significant.
 As a result, the orbital environment is generally quite complex and it is difficult to generate analytical insights.
 
-% Must estimate gravity and shape from ground based optical measurements
 % most use a spherical harmonic model or a ellipsoid model but we use a polyhedron model
 An accurate gravitational potential model is necessary for the operation of spacecraft about asteroids.
 Additionally, a detailed shape model of the asteroid is needed for trajectories passing close to the body.
 The classic approach is to expand the gravitational potential into a harmonic series and compute the series coefficients.
 Radio tracking data of an orbiting spacecraft allows one to estimate the series coefficients.
-The harmonic representation is guaranteed to converge outside of the circumscribing sphere and can be truncated at a finite order based on accuracy requirements.
+The harmonic representation is guaranteed to converge outside of the circumscribing sphere and can be truncated at a finite order based on accuracy requirements~\cite{scheeres2012a}.
 However, the harmonic expansion is always an approximation as a result of the infinite order series used in the representation.
 Additionally, the harmonic model used outside of the circumscribing sphere is not guaranteed to converge inside the sphere.
-As a result, additional steps must be taken to determine a valid harmonic expansion for particles close to the body.
-This results in a cumbersome gravity field model that requires additional constraints to ensure continuity and validity at the radius of the circumscribing sphere~\cite{werner1994 ,werner1996}.
-Instead, we model the asteroid as a constant-density polyhedron and avoid the issues of the harmonic expansion.
+
+A popular approach to deal with this divergence is to use a different gravitational model within the circumscribing sphere.
+For example, Reference~\citenum{scheeres2000} uses both a polyhedron field and a spherical harmonic expansion to represent the full gravitational field of the body.
+The spherical harmonic coefficients are computed from the polyhedron shape model using a constant density assumption~\cite{werner1997}.
+This model is applied while close to the body while the harmonic expansion is applied when outside the circumscribing sphere.
+Similarly, Reference~\citenum{herrera2014} uses two different harmonic expansion models to represent the gravitational field inside and outside of the circumscribing sphere.
+In this case, the coefficients must be carefully chosen to ensure continuity of the gravitational field at the circumscribing sphere.
+In both cases, this type of model results in a cumbersome gravity field expression that requires additional constraints to ensure continuity and validity at the radius of the circumscribing sphere.
+Any integration software will need to incorporate a switching mechanism between the models when crossing the circumscribing sphere.
+Instead, we use a different approach and model the asteroid as a constant-density polyhedron.
+
+In contrast, the polyhedron model results in an exact closed form expression of the gravitational potential field~\cite{werner1994,werner1996}.
+This type of model results in the exact potential up to the accuracy of the shape model and a constant density assumption.
+However, the calculation of the potential, or the acceleration, requires a summation over every face of the polyhedron. 
+As a result, it typically requires a large amount of computation in contrast to the harmonic expansion models. 
+However, the formulation is well suited to parallelization and improvements with efficient coding practices. 
+Finally, the polyhedron method is well suited to trajectories passing close to the body and offers a simple metric to determine if a particle is inside the asteroid.
+The use of the polyhedron model results in a single expression of the gravitational field that is valid everywhere around the body of the asteroid.
 
 % use of low thrust propulsion
 The application of optimal control methods for orbital trajectory design is nontrivial.
@@ -76,7 +90,9 @@ Similar to the three-body problem, there is an insufficient number of analytical
 As a result, accurate numerical methods are required to determine optimal solutions.
 These methods are critically dependent on an accurate initial guess in order to allow for convergence to an optimal solution.
 
-% similarity to the three body problem
+% Discuss previous work and their drawbacks to determine transfers about asteroids
+
+% Detail of work - more empasis and add the novelty of our work
 The irregular shape of asteroids leads to a richer dynamics as compared to the familiar Kepler's problem.
 The motion of particles around asteroids is modeled using the restricted full two-body problem.
 This model has many similarities with the restricted three body problem, and much of the theory developed for the three-body problem is also applicable~\cite{mondelo2010,herrera2014}.
@@ -97,13 +113,6 @@ The spherical harmonic expansion is a popular method of representing the gravity
 Approximations are possible by truncating the infinite order series to fixed set of coefficients, with the most important terms corresponding to the second order and degree~\cite{scheeres1994}. 
 However, when evaluated close to the body the series expansion will diverge and is no longer accurate. 
 Therefore, the spherical harmonic representation is not ideal for landing trajectories or those passing close to the surface.
-
-In contrast, the polyhedron model results in an exact closed form expression of the gravitational potential field~\cite{werner1994}.
-In addition, the model results in the exact potential for the given shape
-However, the calculation of the potential, or the acceleration, requires a summation over every face of the polyhedron. 
-As a result, it typically requires a large amount of computation in contrast to the harmonic expansion. 
-However, the formulation is well suited to parallelization and improvements with efficient coding practices. 
-Finally, the polyhedron method is well suited to trajectories passing close to the body and offers a simple metric to determine if a particle is inside the asteroid.
 
 % benefits of the polyhedron model
 A polyhedral model of the surface of an asteroid can be determined from remote optical or radar sensors.
@@ -435,7 +444,7 @@ The initial conditions for both orbits are defined in the body-fixed frame as
     \quad
     \vecbf{x}_t =
     \begin{bmatrix}
-        3.8161 \\ 0 \\ 0.0007 \\ 0\\ -0.0015 \\ 0
+        6.1175 \\ 0 \\ 0.0001 \\ 0\\ -0.0025 \\ 0
     \end{bmatrix} .
 \end{align}
 \Cref{fig:initial_transfer} shows the initial, \( \vecbf{x}_i \), and target, \( \vecbf{x}_t\), periodic orbits which lie in the equatorial plane of Castalia.

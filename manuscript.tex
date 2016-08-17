@@ -23,7 +23,7 @@
 
 \begin{abstract}\label{sec:abstract}
 
-We present a computational approach for the design of continuous low thrust transfers around asteroids.
+We present a computational approach for the design of continuous low thrust transfers around an asteroid.
 These transfers are computed through the use of a reachability set generated on a lower dimensional \Poincare surface.
 Complex, long duration transfer trajectories are highly sensitive to the initial guess and generally have a small region of convergence.
 Computation of the reachable set alleviates the need to generate an accurate initial guess for optimization.
@@ -66,7 +66,7 @@ Additionally, the harmonic model used outside of the circumscribing sphere is no
 A popular approach to deal with this divergence is to use a different gravitational model within the circumscribing sphere.
 For example, Reference~\citenum{scheeres2000} uses both a polyhedron field and a spherical harmonic expansion to represent the full gravitational field of the body.
 The spherical harmonic coefficients are computed from the polyhedron shape model using a constant density assumption~\cite{werner1997}.
-This model is applied while close to the body while the harmonic expansion is applied when outside the circumscribing sphere.
+This model is applied close to the body while the harmonic expansion is applied when outside the circumscribing sphere.
 Similarly, Reference~\citenum{herrera2014} uses two different harmonic expansion models to represent the gravitational field inside and outside of the circumscribing sphere.
 In this case, the coefficients must be carefully chosen to ensure continuity of the gravitational field at the circumscribing sphere.
 In both cases, this type of approach results in a cumbersome gravity field expression that requires additional constraints to ensure continuity and validity at the radius of the circumscribing sphere.
@@ -241,7 +241,7 @@ The body-fixed equations of motion of a massless particle about an arbitrarily r
 \begin{align}\label{eq:body_eoms}
     \ddot{\vecbf{r}} + 2 \vecbf{\Omega} \times \dot{\vecbf{r}} + \vecbf{\Omega} \times \parenth{ \vecbf{\Omega} \times \vecbf{r} } + \dot{\vecbf{\Omega}} \times \vecbf{r} = \nabla U(\vecbf{r}) ,
 \end{align}
-where \( \vecbf{\Omega} \in \R^{3 \times 1}\) is the instantaneous angular velocity vector of the asteroid represented in the body-fixed frame, \( \vecbf{r} \) is the position of the particle in the body-fixed frame, and \( \nabla U_{\vecbf{r}} \) is the gradient of the gravitational potential~\cite{scheeres2012a}.
+where \( \vecbf{\Omega} \in \R^{3 \times 1}\) is the instantaneous angular velocity vector of the asteroid represented in the body-fixed frame, \( \vecbf{r} \) is the position of the particle in the body-fixed frame, and \( \nabla U(\vecbf{r}) \) is the gradient of the gravitational potential~\cite{scheeres2012a}.
 We assume that the asteroid rotates at a uniform rate, \( \norm{\vecbf{\Omega}} = \omega \in \R^1 \), about the axis of the maximum moment of inertia, \( \vecbf{\Omega} = \omega \hat{\vecbf{z} }\).
 As a result, we can represent the equations of motion in scalar form as
 \begin{align} \label{eq:eoms}
@@ -416,7 +416,8 @@ where the Hamiltonian, \( H\), is defined as
 \begin{align}\label{eq:hamiltonian}
     H = \vecbf{\lambda}_r^T \vecbf{v} + \vecbf{\lambda}_v^T \parenth{\vecbf{g}(\vecbf{r}) + \vecbf{h}(\vecbf{v}) + \vecbf{u}}.
 \end{align}
-The costate is given by \( \vecbf{\lambda} = \bracket{ \vecbf{\lambda}_r~\> \vecbf{\lambda}_v }^T \in \R^{6 \times 1}\), \( \vecbf{\beta} \in \R^{4 \times 1} \) are the additional Lagrange multiplers associated with the terminal constraints in~\cref{eq:terminal_constraints}, and \( \mu \) is a Lagrange multipler associated with the control constraint in~\cref{eq:control_constraint}.
+The costate is given by \( \vecbf{\lambda} = \bracket{ \vecbf{\lambda}_r~\> \vecbf{\lambda}_v }^T \in \R^{6 \times 1}\). 
+The vector \( \vecbf{\beta} \in \R^{4 \times 1} \) are the additional Lagrange multiplers associated with the terminal constraints in~\cref{eq:terminal_constraints}, and \( \mu \) is a Lagrange multipler associated with the control constraint in~\cref{eq:control_constraint}.
 
 We can redefine the optimal control in terms of the costate by rewriting the necessary condition as
 \begin{align*}
@@ -438,8 +439,10 @@ The multiple shooting method reduces the sensitivity of the terminal states to t
 Using a shorter time interval alleviates many of the issues of single shooting approaches, which suffer from convergence difficulties near the optimal solution.
 To ensure a continuous trajectory we incorporate additional constraints
 \begin{align}\label{sec:interior_constraints}
-    \vecbf{x}_{m-1}^{-} &= \vecbf{x}_m^{+} , \\
-    \vecbf{\lambda}_{m-1}^{-} &= \vecbf{\lambda}_m^{+},
+    \begin{split}
+        \vecbf{x}(t_{m-1}^{-}) &= \vecbf{x}(t_{m}^{+}) , \\
+        \vecbf{\lambda}(t_{m-1}^{-}) &= \vecbf{\lambda}(t_{m}^{+}),        
+    \end{split}
 \end{align}
 which ensure that both the state and costate are continuous at the patch point between segment \( m-1 \) and \( m\).
 
@@ -578,6 +581,10 @@ The use of the \Poincare section allows for trajectory design on a lower dimensi
 We use an indirect optimal control formulation to incorporate a control magnitude constraint and several terminal state constraints.
 Utilizing the reachability set alleviates the need to determine accurate initial conditions that allow for convergence of the optimal solution.
 In addition, the use of the polyhedron gravitational model gives simple method of extending this work to any small body that also possesses a defined shape model.
+
+\section*{Acknowledgments}\label{sec:acknowledgments}
+
+This research has been supported in part by NSF under the grants CMMI-1243000, CMMI-1335008, and CNS-1337722.
 
 \bibliographystyle{aiaa}
 \bibliography{library}

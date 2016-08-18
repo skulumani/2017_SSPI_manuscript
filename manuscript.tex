@@ -99,7 +99,7 @@ Typically, the optimal control problem is solved via direct methods, which appro
 The state and control trajectories are discretly parameterized and solved in the form of a nonlinear optimization problem.
 Alternatively, indirect methods apply calculus of variations to derive the necessary conditions for optimality. 
 This yields a lower dimensioned problem as compared to the direct approach.
-In addition, satisfication of the necessary conditions guarantee local optimality in contrast to directo methods which result in sub-optimal solutions.
+In addition, satisfication of the necessary conditions guarantee local optimality in contrast to direct methods which result in sub-optimal solutions.
 
 In this paper, we extend the design method previously developed in the three-body problem to motion about asteroids~\cite{kulumani2015}.
 Our systematic approach avoids the difficulties in selecting an appropriate initial guess for optimization.
@@ -145,7 +145,7 @@ Therefore, this model is ideal for missions traversing large regions both close 
 \subsection{Polyhedron Gravity Model}\label{sec:polyhedron_model}
 
 We represent the gravitational potential of the asteroid using a polyhedron gravitation model.
-This model is composed of a polyhedron, a three-dimensional solid body, that is defined by a series of vectors in the body-fixed frame.
+This model is composed of a polyhedron, which is a three-dimensional solid body, that is defined by a series of vectors in the body-fixed frame.
 The vectors define vertices in the body-fixed frame as well as planar faces which compose the surface of the asteroid.
 We assume that each face is a triangle composed of three vertices and three edges.
 As a result, only two faces meet at each edge while three faces meet at each vertex.
@@ -242,7 +242,7 @@ The body-fixed equations of motion of a massless particle about an arbitrarily r
     \ddot{\vecbf{r}} + 2 \vecbf{\Omega} \times \dot{\vecbf{r}} + \vecbf{\Omega} \times \parenth{ \vecbf{\Omega} \times \vecbf{r} } + \dot{\vecbf{\Omega}} \times \vecbf{r} = \nabla U(\vecbf{r}) ,
 \end{align}
 where \( \vecbf{\Omega} \in \R^{3 \times 1}\) is the instantaneous angular velocity vector of the asteroid represented in the body-fixed frame, \( \vecbf{r} \) is the position of the particle in the body-fixed frame, and \( \nabla U(\vecbf{r}) \) is the gradient of the gravitational potential~\cite{scheeres2012a}.
-We assume that the asteroid rotates at a uniform rate, \( \norm{\vecbf{\Omega}} = \omega \in \R^1 \), about the axis of the maximum moment of inertia, \( \vecbf{\Omega} = \omega \hat{\vecbf{z} }\).
+We assume that the asteroid rotates at a uniform rate, \( \norm{\vecbf{\Omega}} = \omega \in \R^1 \), about the axis of the maximum moment of inertia, i.e.\ \( \vecbf{\Omega} = \omega \hat{\vecbf{z} }\).
 As a result, we can represent the equations of motion in scalar form as
 \begin{align} \label{eq:eoms}
     \begin{split}
@@ -279,7 +279,7 @@ Just as in the three-body problem, the Jacobi constant in~\cref{eq:jacobi} divid
 Similarly, there exist, in general, four equilibrium points and also their associated stable and unstable manifolds~\cite{scheeres1996,scheeres1994}.
 The properties of these manifolds play a critical role in the dynamics of trajectories in their vicinity.
 
-\section{Reachability Set on \Poincare Section}\label{sec:reachability}
+\section{Reachability Set on a \Poincare Section}\label{sec:reachability}
 
 Typical optimal control methods, including both indirect and direct based methods, are highly dependent on an accurate initial guess.
 For indirect optimization, which is based on the calculus of variations, this results in the well-known two-point boundary value problem.

@@ -6,7 +6,7 @@
 
  \author{
   Shankar Kulumani\thanksibid{1}%
-    \thanks{Doctoral Student, \href{mailto:skulumani@gwu.edu}{skulumani@gwu.edu}. Student AIAA Member.}
+    \thanks{Doctoral Student, \href{mailto:skulumani@gwu.edu}{skulumani@gwu.edu}. Student Member AIAA.}
   \ and Taeyoung Lee\thanksibid{2}\thanks{Associate Professor, \href{mailto:tylee@gwu.edu}{tylee@gwu.edu}.}\\
   {\normalsize\itshape
    George Washington University, Washington, District of Columbia }\\
@@ -39,7 +39,7 @@ We demonstrate this method by determining a transfer trajectory about the astero
 % Motivation for missions/studying asteroids
 Small solar system bodies, such as asteroids and comets, are of significant interest to the scientific community; these small bodies offer great insight into the early formation of the solar system.
 This insight offers additional detail into the formation of the Earth and also the probable formation of other planetary bodies.
-Of particular interest are those near-Earth asteroids (NEA) which inhabit heliocentric orbits in vicinity of the Earth.
+Of particular interest are those near-Earth asteroids (NEA) which inhabit heliocentric orbits in the vicinity of the Earth.
 These easily accessible bodies provide attractive targets to support space industrialization, mining operations, and scientific missions.
 NEAs potentially contain many materials such as those useful for propulsion, construction, or for use in semiconductors.
 Also, many bodies contain highly profitable materials, such as precious or strategic metals~\cite{ross2001}.
@@ -71,7 +71,7 @@ Similarly, Reference~\citenum{herrera2014} uses two different harmonic expansion
 In this case, the coefficients must be carefully chosen to ensure continuity of the gravitational field at the circumscribing sphere.
 In both cases, this type of approach results in a cumbersome gravity field expression that requires additional constraints to ensure continuity and validity at the radius of the circumscribing sphere.
 Any integration software will need to incorporate a switching mechanism between the models when crossing the circumscribing sphere.
-Instead, we use a different approach and model the asteroid as a constant-density polyhedron.
+Instead, we use a simpler approach and model the asteroid as a constant-density polyhedron.
 
 The polyhedron model results in an exact closed form expression of the gravitational potential field~\cite{werner1994,werner1996}.
 This type of model results in the exact potential up to the accuracy of the shape model and a constant density assumption.
@@ -105,7 +105,7 @@ In this paper, we extend the design method previously developed in the three-bod
 Our systematic approach avoids the difficulties in selecting an appropriate initial guess for optimization.
 We instead utilize the concept of the reachability set to enable a simple methodology of selecting initial conditions to achieve general orbital transfers.
 This method allows the spacecraft to depart from fixed periodic solutions through the use of a low-thrust propulsion system.
-In addition, we utilize a polyhedron gravitational model which is accurate and is globally applicable about the asteroid.
+In addition, we utilize a polyhedron gravitational model which is accurate and globally applicable about the asteroid.
 
 We formulate an optimal control problem to calculate the reachability set on a lower dimensional \Poincare section.
 Given an initial condition and fixed time horizon, the reachable set is the set of states attainable, subject to the operational constraints of the spacecraft.
@@ -121,26 +121,26 @@ This paper present an indirect optimal control formulation to generate the reach
 Using the reachability set on the \Poincare section allows for a simple method of choosing trajectories which approach a target.
 In addition, the reachability set gives an indication of the regions of the phase space accessible to the spacecraft.
 This method allows us to avoid the difficulties inherent in choosing valid initial conditions for the computation of optimal transfer trajectories.
-We develop the optimal control formulation and apply this method to a transfer about asteroid 4769 Castalia.
+We develop the optimal control formulation and apply this method to an example transfer about asteroid 4769 Castalia.
 
 \section{Asteroid Model}\label{sec:asteroid_model}
 
-In this analysis we consider transfers about the asteroid 4769 Castalia.
+In this analysis, we consider transfers about the asteroid 4769 Castalia.
 Castalia has an accurate shape model and is also considered a potentially hazardous asteroid with a possibility of Earth impact~\cite{hudson1994}.
 We model the gravitational potential field of Castalia using a polyhedron gravity model instead of using a spherical harmonic expansion.
-The spherical harmonic expansion is a popular method of representing the gravity field~\cite{scheeres1996}.
-Approximations are possible by truncating the infinite order series to fixed set of coefficients, with the most important terms corresponding to the second order and degree~\cite{scheeres1994}. 
-However, when evaluated close to the body the series expansion will diverge and is no longer accurate. 
+The spherical harmonic expansion is a popular method of representing the gravitational field~\cite{scheeres1996}.
+Approximations are possible by truncating the infinite order series to a fixed set of coefficients, with the most important terms corresponding to the second order and degree~\cite{scheeres1994}. 
+However, when evaluated close to the body, the series expansion will diverge and is not valid inside the circumscribing sphere.
 Therefore, the spherical harmonic representation is not ideal for landing trajectories or those passing close to the surface.
 
 % benefits of the polyhedron model
 A polyhedral model of the surface of an asteroid can be determined from remote optical or radar sensors.
-The faces of the polyhedron can be large or small and allow for fine detail such as depression, craters, ridges, or interior voids.
-In addition, there is no requirement for the body to be modeled at a uniformly high resolution so small details can be incorporated with minimal cost.
+The faces of the polyhedron can be large or small and allow for fine detail such as depressions, craters, ridges, or interior voids.
+In addition, there is no requirement for the body to be modeled at a uniformly high resolution, as a result small details can be incorporated with minimal cost.
 From the shape model, an analytical, closed form expression for the gravitational potential can be derived.
 The polyhedral approach provides an accurate gravitational model consistent with the resolution of the shape and the chosen discretization.
 Furthermore, the polyhedron model is an exact solution up to the surface of the body.
-Therefore, this model is ideal for missions traversing large regions both close and far from the asteroid.
+Therefore, this model is ideal for missions traversing large regions of the phase space both close and far from the asteroid.
 
 \subsection{Polyhedron Gravity Model}\label{sec:polyhedron_model}
 
@@ -153,7 +153,7 @@ Only the body-fixed vectors, and their associated topology, is required to defin
 References~\citenum{werner1994} and~\citenum{werner1996} give a detailed derivation of the polyhedron model.
 Here, we summarize the key developments and equations required for implementation.
 
-Consider three vectors \( \vecbf{v}_1, \vecbf{v}_2, \vecbf{v}_3 \in \R^{3 \times 1} \), assumed to be ordered in a counterclockwise direction, which define a face.
+Consider three vectors \( \vecbf{v}_1, \vecbf{v}_2, \vecbf{v}_3 \in \R^{3 \times 1} \), assumed to be ordered in a counterclockwise direction about an outward facing normal vector, which define a face.
 It is easy to define the three edges of each face as
 \begin{align}\label{eq:edges}
     \vecbf{e}_{i+1,i} = \vecbf{v}_{i+1} - \vecbf{v}_i \in \R^{3 \times 1 },
@@ -335,7 +335,7 @@ Typically, analysis for the three-body problem relies heavily on symmetries in t
 However, in our system model, the gravitational potential, given by~\cref{eq:potential}, has no symmetries.
 In spite of this, it is still possible to determine periodic solutions through the application of a \Poincare map with the surface of section chosen normal to a surface in the phase space~\cite{scheeres2000}.
 For a periodic orbit, the trajectories will intersect the \Poincare section at two distinct points every half orbit.
-With the addition of a low thrust control input, we are able to expand the reachable set from a distinct point to a larger area on the \Poincare section.
+With the addition of a low thrust control input, we are able to expand the reachable set from a distinct point to a larger region on the \Poincare section.
 \Cref{fig:reachability_set} illustrates this methodology.
 Without any control input, the trajectories will follow the system dynamics, \( \psi(t, \vecbf{x}_0 ) \) and intersect the \Poincare section at \( \vecbf{x}_n\).
 The addition of a control input allows the spacecraft to depart from the natural dynamics and intersect the section at another location denoted by the dashed circle.
@@ -537,14 +537,14 @@ where \( k_x, k_z, k_{\dot{x}}, k_{\dot{z}} \) are used to weight the relative i
     \label{fig:phi_distance} 
 \end{figure}
 
-The trajectory which minimizes \( d \) is indicated by the red marker in~\cref{fig:poincare_section,fig:phi_distance}.
+The trajectory which minimizes \( d \) is indicated by the red circular markers in~\cref{fig:poincare_section,fig:phi_distance}.
 Since the first reachability set does not include the target we use the minimum state from the first stage to initialize another reachability computation.
 Once again we compute the reachability set by discretization of the angles \( \phi_i \) on the \Poincare section.
 This second stage, represented by the cyan markers in~\cref{fig:poincare_section,fig:phi_distance}, further increases the \( x, z\) components but does not reach the target orbit.
 As a result, a third and forth stage are generated in a similar manner and shown by the green and blue markers in~\cref{fig:poincare_section,fig:phi_distance}, respectively.
 We can see in~\cref{fig:poincare_section} that the reachability set of the forth stage includes both the \( x \) and \( z\) components of the target periodic orbit.
 At the same time there is a relatively large difference between the \( \dot{x} \), \( \dot{z} \), and \( z \) components of the forth stage and the target orbit.
-In practice this is not a large concern as we have direct control over the spacecraft velocity via the control input and the equatorial plane still remains within the reachability set of the transfer.
+In practice, this is not a large concern as we have direct control over the spacecraft velocity via the control input and the equatorial plane still remains within the reachability set of the transfer.
 
 With the reachability set encompassing the target orbit, we can generate a final transfer to the target.
 We use the minimum state calculated from the final stage to serve as the initial condition of the transfer.

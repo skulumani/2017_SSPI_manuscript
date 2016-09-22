@@ -37,7 +37,7 @@ We demonstrate this method by determining a transfer trajectory about the astero
 \section{Introduction}\label{sec:introduction}
 
 % Motivation for missions/studying asteroids
-Small solar system bodies, such as asteroids and comets, are of significant interest to the scientific community; these small bodies offer great insight into the early formation of the solar system.
+Small solar system bodies, such as asteroids and comets, are of significant interest to the scientific community; These small bodies offer great insight into the early formation of the solar system.
 This insight offers additional detail into the formation of the Earth and also the probable formation of other planetary bodies.
 Of particular interest are those near-Earth asteroids (NEA) which inhabit heliocentric orbits in the vicinity of the Earth.
 These easily accessible bodies provide attractive targets to support space industrialization, mining operations, and scientific missions.
@@ -125,8 +125,8 @@ We develop the optimal control formulation and apply this method to an example t
 
 \section{Asteroid Model}\label{sec:asteroid_model}
 
-In this analysis, we consider transfers about the asteroid 4769 Castalia.
-Castalia has an accurate shape model and is also considered a potentially hazardous asteroid with a possibility of Earth impact~\cite{hudson1994}.
+In this analysis, we consider orbital transfers about the asteroid 4769 Castalia.
+There is an accurate shape model for Castalia, and it is also considered a potentially hazardous asteroid with a possibility of Earth impact~\cite{hudson1994}.
 We model the gravitational potential field of Castalia using a polyhedron gravity model instead of using a spherical harmonic expansion.
 The spherical harmonic expansion is a popular method of representing the gravitational field~\cite{scheeres1996}.
 Approximations are possible by truncating the infinite order series to a fixed set of coefficients, with the most important terms corresponding to the second order and degree~\cite{scheeres1994}. 
@@ -283,7 +283,7 @@ The properties of these manifolds play a critical role in the dynamics of trajec
 
 Typical optimal control methods, including both indirect and direct based methods, are highly dependent on an accurate initial guess.
 For indirect optimization, which is based on the calculus of variations, this results in the well-known two-point boundary value problem.
-Insight into the problem or insight by the designer is usually required to determine appropriate initial costates that will converge to the optimal solution and satisfy the desired constraints.
+Insight into the problem is usually required to determine appropriate initial costates that will converge to the optimal solution and satisfy the desired constraints.
 To avoid this issue, we utilize the concept of the reachability set on a lower dimensional \Poincare section.
 By repeatedly constructing the reachability set, we can achieve general transfers by determining set intersections on the \Poincare section.
 This alleviates the need to determine an accurate initial guess while offering some insight into the dynamics of neighboring trajectories
@@ -342,9 +342,10 @@ The addition of a control input allows the spacecraft to depart from the natural
 We use the cost function \( J \) to define a distance metric on the \Poincare section.
 Maximization of \( J \), or the minimization of \( -J \), along various directions, which are parameterized using \( \phi_d \), on the \Poincare section allows us to generate the largest reachability set under the bounded control input.
 
-We define the \Poincare section as the surface normal to \( y = 0 \).
-Following convention, the \Poincare map is defined as the map from one transversal crossing of the surface \( y = 0\) to the next.
-Using the method of Reference~\citenum{scheeres2000}, we remove \( y \) and \( \dot{y} \) from consideration and create a four-dimensional map.
+We apply the \Poincare map with a surface of section chosen to be normal to the position \( y = 0 \).
+The \Poincare map is then defined as the map between successive transversal crossings of the surface of section.
+To ensure a transverse crossing of the section we also require that \( \dot{y} \neq 0 \) when \( y = 0 \).
+With this definition of the \Poincare map, it is possible to remove the two variables \( y \) and \( \dot{y} \) from consideration and create a four-dimensional map from the \Poincare section to itself.
 The \Poincare section, represented by \( \Sigma \), then becomes
 \begin{align}\label{eq:poincare_section}
     \Sigma = \braces{\parenth{x, \dot{x}, z, \dot{z}} | y(t_f) = 0 }.

@@ -435,7 +435,7 @@ Finally, we use the second-order necessary condition to determine the correct si
 
 This optimal control formulation results in a two point boundary value problem.
 We use a shooting method to determine the initial costates, \( \vecbf{\lambda}(t_0)\), such that the terminal constraints are satisfied.
-In addition, we implement a multiple shooting method which sub-divides the the entire trajectory into small sub-intervals~\cite{stoer2013}.
+In addition, we implement a multiple shooting method which sub-divides the the entire trajectory into smaller sub-intervals~\cite{stoer2013}.
 The multiple shooting method reduces the sensitivity of the terminal states to the initial conditions.
 Using a shorter time interval alleviates many of the issues of single shooting approaches, which suffer from convergence difficulties near the optimal solution.
 To ensure a continuous trajectory we incorporate additional constraints
